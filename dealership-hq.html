@@ -48,23 +48,29 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .topnav{
   height:60px;background:#000;border-bottom:1px solid var(--border);
   display:flex;align-items:center;padding:0 28px;gap:0;flex-shrink:0;
-  position:relative;z-index:50;
+  position:relative;z-index:50;overflow:hidden;
 }
 .logo{
   font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:4px;
-  color:#fff;margin-right:40px;white-space:nowrap;
+  color:#fff;margin-right:24px;white-space:nowrap;flex-shrink:0;
 }
 .logo em{color:var(--text-muted);font-style:normal;font-size:14px;letter-spacing:1px;margin-left:8px;}
-.nav-tabs{display:flex;gap:2px;flex:1;}
+.nav-tabs{
+  display:flex;gap:2px;flex:1;
+  overflow-x:auto;overflow-y:hidden;
+  scrollbar-width:none;-ms-overflow-style:none;
+  scroll-behavior:smooth;
+}
+.nav-tabs::-webkit-scrollbar{display:none;}
 .ntab{
-  padding:7px 20px;border-radius:0;font-size:12px;font-weight:600;
+  padding:7px 18px;border-radius:0;font-size:12px;font-weight:600;
   letter-spacing:1px;text-transform:uppercase;cursor:pointer;color:var(--text-muted);
   border:none;background:none;font-family:'DM Sans',sans-serif;transition:all .15s;
-  border-bottom:2px solid transparent;
+  border-bottom:2px solid transparent;white-space:nowrap;flex-shrink:0;
 }
 .ntab:hover{color:var(--text);}
 .ntab.active{color:#fff;border-bottom-color:#fff;}
-.nav-right{display:flex;align-items:center;gap:16px;margin-left:auto;}
+.nav-right{display:flex;align-items:center;gap:12px;margin-left:12px;flex-shrink:0;}
 .live-badge{
   display:flex;align-items:center;gap:6px;
   font-family:'DM Mono',monospace;font-size:11px;color:var(--text-muted);
