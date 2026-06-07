@@ -508,7 +508,7 @@ footer{
 <nav id="navbar">
   <a href="#" class="nav-logo">CTD<span>/</span>US</a>
   <div class="nav-links">
-    <a href="#inventory">Inventory</a>
+    <a href="inventory.html">Inventory</a>
     <a href="#services">Services</a>
     <a href="#about">About</a>
     <a href="#contact">Contact</a>
@@ -602,11 +602,10 @@ footer{
       <button class="filter-btn" data-filter="Flatbed" onclick="filterUnits(this)">Flatbed</button>
     </div>
   </div>
-  <div class="inv-grid fade-up" id="inventoryGrid">
-    <!-- Populated from HQ data or sample cards -->
-  </div>
-  <div class="inv-cta" style="margin-top:32px;">
-    <a href="#contact" class="btn-ghost">Don't see what you need? Ask us →</a>
+  <div class="inv-grid fade-up" id="inventoryGrid"></div>
+  <div class="inv-cta" style="margin-top:32px;display:flex;gap:16px;justify-content:center;">
+    <a href="inventory.html" class="btn-primary">View All Inventory →</a>
+    <a href="#contact" class="btn-ghost">Don't see what you need? Ask us</a>
   </div>
 </div>
 
@@ -807,7 +806,7 @@ footer{
     <div>
       <div class="footer-col-title">Quick Links</div>
       <div class="footer-links">
-        <a href="#inventory">Inventory</a>
+        <a href="inventory.html">Inventory</a>
         <a href="#services">Services</a>
         <a href="#about">About</a>
         <a href="#contact">Contact</a>
@@ -816,11 +815,11 @@ footer{
     <div>
       <div class="footer-col-title">Trailer Types</div>
       <div class="footer-links">
-        <a href="#inventory">Cargo Trailers</a>
-        <a href="#inventory">Utility Trailers</a>
-        <a href="#inventory">Horse Trailers</a>
-        <a href="#inventory">Equipment Trailers</a>
-        <a href="#inventory">Flatbeds</a>
+        <a href="inventory.html">Cargo Trailers</a>
+        <a href="inventory.html">Utility Trailers</a>
+        <a href="inventory.html">Horse Trailers</a>
+        <a href="inventory.html">Equipment Trailers</a>
+        <a href="inventory.html">Flatbeds</a>
       </div>
     </div>
   </div>
@@ -879,7 +878,7 @@ function renderFiltered() {
          </div>`
       : '';
     return `
-      <div class="unit-card" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
+      <div class="unit-card" onclick="window.location='trailer.html?id=${u.id||'s1'}'">
         ${photoHTML}
         <div class="unit-tag">
           <span class="tag-pill ${statusClass}">${statusLabel}</span>

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trailer Detail — Spring Point Trailer Sales</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080808;--surface:#101010;--surface2:#181818;--surface3:#222;--border:#272727;--border2:#353535;--text:#f0f0f0;--text-mid:#a0a0a0;--text-muted:#555;--green:#22c55e;--yellow:#eab308;--red:#ef4444;--blue:#3b82f6;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;overflow-x:hidden;}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px;}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;background:rgba(8,8,8,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 40px;justify-content:space-between;}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:5px;color:#fff;text-decoration:none;}
+.nav-logo span{color:var(--text-muted);}
+.nav-links{display:flex;align-items:center;gap:32px;}
+.nav-links a{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);text-decoration:none;transition:color .15s;}
+.nav-links a:hover{color:#fff;}
+.nav-hq{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border2);padding:7px 16px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#fff;text-decoration:none;}
+.nav-hq .dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* BREADCRUMB */
+.breadcrumb{padding:84px 40px 0;max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text-muted);font-family:'DM Mono',monospace;letter-spacing:1px;}
+.breadcrumb a{color:var(--text-muted);text-decoration:none;transition:color .15s;}
+.breadcrumb a:hover{color:#fff;}
+.breadcrumb span{color:var(--border2);}
+
+/* MAIN LAYOUT */
+.detail-wrap{max-width:1200px;margin:0 auto;padding:32px 40px 80px;display:grid;grid-template-columns:1fr 380px;gap:48px;align-items:start;}
+
+/* PHOTO GALLERY */
+.gallery{display:flex;flex-direction:column;gap:8px;}
+.main-photo{aspect-ratio:16/9;overflow:hidden;background:var(--surface2);border:1px solid var(--border);}
+.main-photo img{width:100%;height:100%;object-fit:cover;display:block;}
+.main-photo-none{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:64px;color:var(--border2);}
+.thumbs{display:flex;gap:6px;flex-wrap:wrap;}
+.thumb{width:80px;height:60px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:border-color .15s;background:var(--surface2);}
+.thumb:hover,.thumb.active{border-color:#fff;}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+
+/* SIDEBAR */
+.sidebar{display:flex;flex-direction:column;gap:0;position:sticky;top:80px;}
+.sidebar-header{padding:28px;background:var(--surface);border:1px solid var(--border);border-bottom:none;}
+.trailer-status{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.status-dot{width:6px;height:6px;border-radius:50%;}
+.status-dot.available{background:var(--green);}
+.status-dot.pending{background:var(--yellow);}
+.trailer-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,3vw,36px);letter-spacing:2px;color:#fff;line-height:1.1;margin-bottom:16px;}
+.trailer-price{font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:2px;color:#fff;line-height:1;}
+.trailer-price .cur{font-size:20px;color:var(--text-muted);margin-right:2px;}
+.price-sub{font-size:11px;color:var(--text-muted);margin-top:4px;}
+
+.cta-box{background:var(--surface);border:1px solid var(--border);padding:24px;}
+.btn-primary{display:block;width:100%;background:#fff;color:#000;border:none;padding:14px;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;text-align:center;text-decoration:none;margin-bottom:10px;}
+.btn-primary:hover{background:#e0e0e0;}
+.btn-ghost{display:block;width:100%;background:transparent;color:var(--text-muted);border:1px solid var(--border2);padding:13px;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;text-align:center;text-decoration:none;}
+.btn-ghost:hover{color:#fff;border-color:#555;}
+.cta-note{font-size:11px;color:var(--text-muted);text-align:center;margin-top:12px;line-height:1.5;}
+
+.specs-box{background:var(--surface);border:1px solid var(--border);border-top:none;}
+.spec-row{display:flex;justify-content:space-between;align-items:center;padding:12px 24px;border-bottom:1px solid var(--border);}
+.spec-row:last-child{border-bottom:none;}
+.spec-label{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;}
+.spec-val{font-size:13px;color:#fff;font-weight:500;text-align:right;max-width:200px;}
+
+/* DESCRIPTION */
+.desc-section{margin-top:32px;}
+.desc-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:#fff;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+.desc-body{font-size:14px;color:var(--text-mid);line-height:1.8;}
+
+/* CONTACT FORM */
+.contact-box{background:var(--surface);border:1px solid var(--border);padding:28px;margin-top:0;}
+.contact-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:#fff;margin-bottom:4px;}
+.contact-sub{font-size:11px;color:var(--text-muted);margin-bottom:20px;}
+.form-field{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
+.form-label{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);}
+.form-field input,.form-field textarea{background:var(--surface2);border:1px solid var(--border);padding:9px 12px;color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:border-color .15s;width:100%;}
+.form-field input:focus,.form-field textarea:focus{border-color:#555;}
+.form-field textarea{resize:vertical;min-height:80px;line-height:1.5;}
+.form-success{display:none;padding:14px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);font-size:13px;text-align:center;margin-top:10px;}
+
+/* LOADING */
+.page-loading{display:flex;align-items:center;justify-content:center;min-height:60vh;font-family:'DM Mono',monospace;font-size:12px;color:var(--text-muted);letter-spacing:2px;}
+
+/* FOOTER */
+footer{background:#000;border-top:1px solid var(--border);padding:40px;}
+.footer-bottom{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
+.footer-copy{font-size:11px;color:var(--text-muted);}
+.footer-links-row{display:flex;gap:24px;}
+.footer-links-row a{font-size:11px;color:var(--text-muted);text-decoration:none;transition:color .15s;}
+.footer-links-row a:hover{color:#fff;}
+
+@media(max-width:900px){
+  nav{padding:0 24px;}
+  .nav-links{display:none;}
+  .breadcrumb{padding:80px 24px 0;}
+  .detail-wrap{grid-template-columns:1fr;padding:24px 24px 60px;gap:24px;}
+  .sidebar{position:static;}
+  footer{padding:32px 24px;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Spring Point<span>/</span>Trailers</a>
+  <div class="nav-links">
+    <a href="inventory.html">Inventory</a>
+    <a href="index.html#services">Services</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+    <a href="dealership-hq.html" class="nav-hq" target="_blank"><div class="dot"></div> Staff Login</a>
+  </div>
+</nav>
+
+<div class="breadcrumb">
+  <a href="index.html">Home</a>
+  <span>/</span>
+  <a href="inventory.html">Inventory</a>
+  <span>/</span>
+  <span id="breadcrumb-name">Loading…</span>
+</div>
+
+<div id="pageLoading" class="page-loading">⟳ LOADING…</div>
+
+<div id="detailContent" style="display:none;">
+  <div class="detail-wrap">
+    <!-- LEFT: Gallery + Description -->
+    <div>
+      <div class="gallery">
+        <div class="main-photo" id="mainPhoto">
+          <div class="main-photo-none">🚛</div>
+        </div>
+        <div class="thumbs" id="thumbs"></div>
+      </div>
+      <div class="desc-section">
+        <div class="desc-title">About This Trailer</div>
+        <div class="desc-body" id="descBody">Contact us for full details on this unit.</div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <div class="trailer-status" id="trailerStatus">
+          <div class="status-dot available"></div>
+          <span>Available</span>
+        </div>
+        <div class="trailer-name" id="trailerName">Loading…</div>
+        <div class="trailer-price" id="trailerPrice"></div>
+        <div class="price-sub" id="priceSub"></div>
+      </div>
+
+      <div class="specs-box" id="specsBox"></div>
+
+      <div class="cta-box">
+        <a href="#inquiry" class="btn-primary" onclick="document.getElementById('inquiry').scrollIntoView({behavior:'smooth'});return false;">Inquire About This Trailer</a>
+        <a href="tel:6185060094" class="btn-ghost">📞 Call 618-506-0094</a>
+        <div class="cta-note">Mon–Fri 8am–12pm · By appt Mon–Sat</div>
+      </div>
+
+      <div class="contact-box" id="inquiry">
+        <div class="contact-title">Send an Inquiry</div>
+        <div class="contact-sub" id="inquirySubtitle">Ask us about this trailer.</div>
+        <div class="form-field">
+          <label class="form-label">Your Name</label>
+          <input type="text" id="inq-name" placeholder="John Smith">
+        </div>
+        <div class="form-field">
+          <label class="form-label">Phone</label>
+          <input type="tel" id="inq-phone" placeholder="618-000-0000">
+        </div>
+        <div class="form-field">
+          <label class="form-label">Message</label>
+          <textarea id="inq-message" placeholder="I'm interested in this trailer…"></textarea>
+        </div>
+        <button class="btn-primary" style="margin-bottom:0;" onclick="sendInquiry()">Send Inquiry →</button>
+        <div class="form-success" id="inqSuccess">✓ Sent! We'll be in touch soon.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 Spring Point Trailer Sales · Newton, IL</div>
+    <div class="footer-links-row">
+      <a href="index.html">Home</a>
+      <a href="inventory.html">Inventory</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const SB_URL = 'https://lqybzvecgpjluxqcpmdq.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxxeWJ6dmVjZ3BqbHV4cWNwbWRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3OTA3NzUsImV4cCI6MjA5NjM2Njc3NX0.bitDyd5e8QnpROLWGbErqkCmzZIUpcYMpMP-zlnVHa0';
+
+let currentUnit = null;
+let photos = [];
+
+async function loadTrailer() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  if (!id) { window.location = 'inventory.html'; return; }
+
+  try {
+    const res = await fetch(`${SB_URL}/rest/v1/inventory?id=eq.${id}&select=*`, {
+      headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+    });
+    const data = await res.json();
+    if (!data || !data.length) { window.location = 'inventory.html'; return; }
+    currentUnit = data[0];
+    renderTrailer(currentUnit);
+  } catch(e) {
+    document.getElementById('pageLoading').textContent = 'Could not load trailer. Try again.';
+  }
+}
+
+function renderTrailer(u) {
+  const name = [u.year, u.make, u.model].filter(Boolean).join(' ') || 'Trailer Unit';
+  document.title = name + ' — Spring Point Trailer Sales';
+  document.getElementById('breadcrumb-name').textContent = name;
+  document.getElementById('trailerName').textContent = name;
+
+  // Photos
+  try { photos = u.photos ? (typeof u.photos === 'string' ? JSON.parse(u.photos) : u.photos) : []; } catch(e){ photos = []; }
+  renderPhotos();
+
+  // Price
+  const priceEl = document.getElementById('trailerPrice');
+  if (u.ask_price) {
+    priceEl.innerHTML = '<span class="cur">$</span>' + parseFloat(u.ask_price).toLocaleString('en-US',{minimumFractionDigits:0});
+    document.getElementById('priceSub').textContent = u.status === 'consignment' ? 'Consignment unit' : 'Financing available · Trades welcome';
+  } else {
+    priceEl.textContent = 'Call for Price';
+  }
+
+  // Status
+  const statusEl = document.getElementById('trailerStatus');
+  const isPending = u.status === 'pending';
+  statusEl.innerHTML = `<div class="status-dot ${isPending?'pending':'available'}"></div><span>${isPending?'Pending Sale':'Available'}</span>`;
+
+  // Description
+  if (u.description) document.getElementById('descBody').textContent = u.description;
+
+  // Inquiry subtitle
+  document.getElementById('inquirySubtitle').textContent = `Ask us about the ${name}.`;
+
+  // Specs
+  const specs = [
+    ['Type', u.type],
+    ['Year', u.year],
+    ['Make', u.make],
+    ['Model', u.model],
+    ['Length', u.length],
+    ['Color', u.color],
+    ['VIN / Serial', u.vin],
+    ['Stock #', u.stock],
+    ['MSRP', u.msrp ? '$' + parseFloat(u.msrp).toLocaleString() : null],
+    ['Status', u.status ? u.status.charAt(0).toUpperCase() + u.status.slice(1) : null],
+  ].filter(([,v]) => v);
+
+  document.getElementById('specsBox').innerHTML = specs.map(([label, val]) =>
+    `<div class="spec-row"><span class="spec-label">${label}</span><span class="spec-val">${val}</span></div>`
+  ).join('');
+
+  document.getElementById('pageLoading').style.display = 'none';
+  document.getElementById('detailContent').style.display = 'block';
+}
+
+function renderPhotos() {
+  const mainPhoto = document.getElementById('mainPhoto');
+  const thumbsEl = document.getElementById('thumbs');
+
+  if (!photos.length) {
+    mainPhoto.innerHTML = '<div class="main-photo-none">🚛</div>';
+    thumbsEl.innerHTML = '';
+    return;
+  }
+
+  mainPhoto.innerHTML = `<img src="${photos[0]}" alt="Trailer photo" id="mainImg">`;
+  thumbsEl.innerHTML = photos.map((p, i) =>
+    `<div class="thumb ${i===0?'active':''}" onclick="setPhoto(${i})"><img src="${p}" alt="Photo ${i+1}"></div>`
+  ).join('');
+}
+
+function setPhoto(index) {
+  document.getElementById('mainImg').src = photos[index];
+  document.querySelectorAll('.thumb').forEach((t, i) => t.classList.toggle('active', i === index));
+}
+
+function sendInquiry() {
+  const name    = document.getElementById('inq-name').value.trim();
+  const phone   = document.getElementById('inq-phone').value.trim();
+  const message = document.getElementById('inq-message').value.trim();
+  const unit    = currentUnit ? [currentUnit.year, currentUnit.make, currentUnit.model].filter(Boolean).join(' ') : 'Trailer';
+  const stock   = currentUnit?.stock ? ' (Stock #' + currentUnit.stock + ')' : '';
+
+  const subject = encodeURIComponent('Inquiry — ' + unit + stock);
+  const body = encodeURIComponent(
+    'Name: ' + name + '\nPhone: ' + phone + '\n\nUnit: ' + unit + stock + '\n\nMessage:\n' + message
+  );
+  window.location.href = 'mailto:cole@springpointtrailersales.com?subject=' + subject + '&body=' + body;
+  document.getElementById('inqSuccess').style.display = 'block';
+}
+
+loadTrailer();
+</script>
+</body>
+</html>

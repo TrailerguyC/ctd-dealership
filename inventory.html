@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventory — Spring Point Trailer Sales</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080808;--surface:#101010;--surface2:#181818;--surface3:#222;--border:#272727;--border2:#353535;--text:#f0f0f0;--text-mid:#a0a0a0;--text-muted:#555;--green:#22c55e;--yellow:#eab308;--red:#ef4444;--blue:#3b82f6;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;overflow-x:hidden;}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;background:rgba(8,8,8,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 40px;justify-content:space-between;}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:5px;color:#fff;text-decoration:none;}
+.nav-logo span{color:var(--text-muted);}
+.nav-links{display:flex;align-items:center;gap:32px;}
+.nav-links a{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);text-decoration:none;transition:color .15s;}
+.nav-links a:hover,.nav-links a.active{color:#fff;}
+.nav-hq{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border2);padding:7px 16px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#fff;text-decoration:none;transition:all .15s;}
+.nav-hq:hover{background:var(--surface3);}
+.nav-hq .dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* PAGE HEADER */
+.page-header{padding:120px 40px 60px;max-width:1200px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:24px;}
+.page-eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px;}
+.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,6vw,80px);letter-spacing:3px;color:#fff;line-height:1;}
+.unit-count{font-family:'DM Mono',monospace;font-size:12px;color:var(--text-muted);margin-top:8px;}
+
+/* FILTERS */
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.filter-btn{padding:7px 18px;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;background:transparent;color:var(--text-muted);border:1px solid var(--border);cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif;}
+.filter-btn:hover,.filter-btn.active{color:#fff;border-color:var(--border2);background:var(--surface2);}
+.search-input{background:var(--surface);border:1px solid var(--border);padding:8px 16px;color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;width:220px;transition:border-color .15s;}
+.search-input:focus{border-color:#555;}
+.search-input::placeholder{color:var(--text-muted);}
+
+/* GRID */
+.inv-wrap{max-width:1200px;margin:0 auto;padding:0 40px 80px;}
+.inv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);}
+.unit-card{background:var(--surface);cursor:pointer;transition:background .15s;position:relative;overflow:hidden;display:flex;flex-direction:column;}
+.unit-card:hover{background:var(--surface2);}
+.unit-photo{aspect-ratio:16/9;overflow:hidden;background:var(--surface3);position:relative;}
+.unit-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s;}
+.unit-card:hover .unit-photo img{transform:scale(1.03);}
+.unit-photo-none{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:32px;color:var(--border2);}
+.unit-body{padding:24px;flex:1;display:flex;flex-direction:column;}
+.unit-tag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.tag-pill{padding:2px 8px;font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;}
+.tag-pill.available{background:rgba(34,197,94,.1);color:var(--green);}
+.tag-pill.pending{background:rgba(234,179,8,.1);color:var(--yellow);}
+.tag-pill.consignment{background:rgba(59,130,246,.1);color:var(--blue);}
+.unit-name{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;color:#fff;margin-bottom:6px;line-height:1.1;}
+.unit-desc{font-size:12px;color:var(--text-muted);line-height:1.6;flex:1;margin-bottom:16px;}
+.unit-footer{display:flex;align-items:center;justify-content:space-between;padding-top:16px;border-top:1px solid var(--border);}
+.unit-price{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;color:#fff;}
+.unit-price .cur{font-size:14px;color:var(--text-muted);}
+.unit-arrow{color:var(--text-muted);font-size:18px;transition:transform .15s;}
+.unit-card:hover .unit-arrow{transform:translateX(4px);color:#fff;}
+.unit-stock{font-family:'DM Mono',monospace;font-size:10px;color:var(--text-muted);}
+
+/* EMPTY */
+.empty-state{text-align:center;padding:80px 40px;color:var(--text-muted);}
+.empty-big{font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:3px;color:var(--surface3);display:block;margin-bottom:12px;}
+
+/* LOADING */
+.loading{text-align:center;padding:80px;font-family:'DM Mono',monospace;font-size:12px;color:var(--text-muted);letter-spacing:2px;}
+
+/* FOOTER */
+footer{background:#000;border-top:1px solid var(--border);padding:40px;}
+.footer-bottom{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
+.footer-copy{font-size:11px;color:var(--text-muted);}
+.footer-links-row{display:flex;gap:24px;}
+.footer-links-row a{font-size:11px;color:var(--text-muted);text-decoration:none;transition:color .15s;}
+.footer-links-row a:hover{color:#fff;}
+
+@media(max-width:900px){
+  nav{padding:0 24px;}
+  .nav-links{display:none;}
+  .page-header{padding:100px 24px 40px;flex-direction:column;align-items:flex-start;}
+  .inv-wrap{padding:0 24px 60px;}
+  .inv-grid{grid-template-columns:1fr;}
+  footer{padding:32px 24px;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Spring Point<span>/</span>Trailers</a>
+  <div class="nav-links">
+    <a href="inventory.html" class="active">Inventory</a>
+    <a href="index.html#services">Services</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+    <a href="dealership-hq.html" class="nav-hq" target="_blank"><div class="dot"></div> Staff Login</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div>
+    <div class="page-eyebrow">Spring Point Trailer Sales</div>
+    <h1 class="page-title">Inventory</h1>
+    <div class="unit-count" id="unitCount">Loading…</div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:12px;align-items:flex-end;">
+    <input type="text" class="search-input" placeholder="Search make, model, type…" oninput="handleSearch(this.value)">
+    <div class="filter-bar" id="filterBar">
+      <button class="filter-btn active" data-filter="all" onclick="filterUnits(this)">All</button>
+      <button class="filter-btn" data-filter="Cargo Trailer" onclick="filterUnits(this)">Cargo</button>
+      <button class="filter-btn" data-filter="Utility Trailer" onclick="filterUnits(this)">Utility</button>
+      <button class="filter-btn" data-filter="Horse Trailer" onclick="filterUnits(this)">Horse</button>
+      <button class="filter-btn" data-filter="Livestock Trailer" onclick="filterUnits(this)">Livestock</button>
+      <button class="filter-btn" data-filter="Equipment Trailer" onclick="filterUnits(this)">Equipment</button>
+      <button class="filter-btn" data-filter="Flatbed" onclick="filterUnits(this)">Flatbed</button>
+      <button class="filter-btn" data-filter="Living Quarters" onclick="filterUnits(this)">Living Quarters</button>
+    </div>
+  </div>
+</div>
+
+<div class="inv-wrap">
+  <div class="loading" id="loadingMsg">⟳ LOADING INVENTORY…</div>
+  <div class="inv-grid" id="invGrid" style="display:none;"></div>
+  <div class="empty-state" id="emptyState" style="display:none;">
+    <span class="empty-big">NO UNITS FOUND</span>
+    <p>Try a different filter or <a href="index.html#contact" style="color:#fff;">contact us</a> — we may have something coming in.</p>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 Spring Point Trailer Sales · Newton, IL</div>
+    <div class="footer-links-row">
+      <a href="index.html">Home</a>
+      <a href="index.html#services">Services</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const SB_URL = 'https://lqybzvecgpjluxqcpmdq.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxxeWJ6dmVjZ3BqbHV4cWNwbWRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3OTA3NzUsImV4cCI6MjA5NjM2Njc3NX0.bitDyd5e8QnpROLWGbErqkCmzZIUpcYMpMP-zlnVHa0';
+
+let allUnits = [];
+let currentFilter = 'all';
+let searchQuery = '';
+
+async function loadInventory() {
+  try {
+    const res = await fetch(SB_URL + '/rest/v1/inventory?select=*&order=date_in.desc', {
+      headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+    });
+    const data = await res.json();
+    allUnits = (data || []).filter(u => u.status !== 'sold');
+    document.getElementById('loadingMsg').style.display = 'none';
+    document.getElementById('invGrid').style.display = 'grid';
+    renderGrid();
+  } catch(e) {
+    document.getElementById('loadingMsg').textContent = 'Could not load inventory — please try again.';
+  }
+}
+
+function renderGrid() {
+  const grid = document.getElementById('invGrid');
+  const empty = document.getElementById('emptyState');
+  let units = allUnits;
+  if (currentFilter !== 'all') units = units.filter(u => u.type === currentFilter);
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    units = units.filter(u =>
+      (u.make||'').toLowerCase().includes(q) ||
+      (u.model||'').toLowerCase().includes(q) ||
+      (u.type||'').toLowerCase().includes(q) ||
+      (u.year||'').toString().includes(q) ||
+      (u.stock||'').toLowerCase().includes(q)
+    );
+  }
+  document.getElementById('unitCount').textContent = units.length + ' unit' + (units.length !== 1 ? 's' : '') + ' available';
+  if (!units.length) { grid.style.display = 'none'; empty.style.display = 'block'; return; }
+  grid.style.display = 'grid'; empty.style.display = 'none';
+
+  grid.innerHTML = units.map(u => {
+    let photos = [];
+    try { photos = u.photos ? (typeof u.photos === 'string' ? JSON.parse(u.photos) : u.photos) : []; } catch(e){}
+    const name = [u.year, u.make, u.model].filter(Boolean).join(' ') || 'Trailer Unit';
+    const price = u.ask_price ? '$' + parseFloat(u.ask_price).toLocaleString('en-US',{minimumFractionDigits:0}) : 'Call for Price';
+    const statusClass = u.status === 'pending' ? 'pending' : u.status === 'consignment' ? 'consignment' : 'available';
+    const statusLabel = u.status === 'pending' ? 'Pending' : u.status === 'consignment' ? 'Consignment' : 'Available';
+    const photoHTML = photos.length
+      ? `<img src="${photos[0]}" alt="${name}" loading="lazy">`
+      : `<div class="unit-photo-none">🚛</div>`;
+    return `<div class="unit-card" onclick="window.location='trailer.html?id=${u.id}'">
+      <div class="unit-photo">${photoHTML}</div>
+      <div class="unit-body">
+        <div class="unit-tag"><span class="tag-pill ${statusClass}">${statusLabel}</span>${u.type||'Trailer'}</div>
+        <div class="unit-name">${name}</div>
+        <div class="unit-desc">${u.description || (u.type ? u.type + ' — tap for full details.' : 'Tap for full details.')}</div>
+        <div class="unit-footer">
+          <div>
+            <div class="unit-price">${u.ask_price?'<span class="cur">$</span>'+parseFloat(u.ask_price).toLocaleString('en-US',{minimumFractionDigits:0}):price}</div>
+            <div class="unit-stock">${u.stock?'Stock #'+u.stock:''}</div>
+          </div>
+          <span class="unit-arrow">→</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterUnits(btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentFilter = btn.dataset.filter;
+  renderGrid();
+}
+
+function handleSearch(val) {
+  searchQuery = val.trim();
+  renderGrid();
+}
+
+loadInventory();
+</script>
+</body>
+</html>
