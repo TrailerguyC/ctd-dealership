@@ -730,28 +730,28 @@ footer{
           <div class="contact-icon">📍</div>
           <div>
             <div class="contact-detail-label">Location</div>
-            <div class="contact-detail-val" id="contact-address">Update in HQ Settings</div>
+            <div class="contact-detail-val">9360 E IL-33, Newton, IL 62448</div>
           </div>
         </div>
         <div class="contact-item">
           <div class="contact-icon">📞</div>
           <div>
             <div class="contact-detail-label">Phone</div>
-            <div class="contact-detail-val" id="contact-phone">Update in HQ Settings</div>
+            <div class="contact-detail-val"><a href="tel:6185060094" style="color:#fff;text-decoration:none;">618-506-0094</a></div>
           </div>
         </div>
         <div class="contact-item">
           <div class="contact-icon">✉️</div>
           <div>
             <div class="contact-detail-label">Email</div>
-            <div class="contact-detail-val" id="contact-email">Update in HQ Settings</div>
+            <div class="contact-detail-val"><a href="mailto:cole@springpointtrailersales.com" style="color:#fff;text-decoration:none;">cole@springpointtrailersales.com</a></div>
           </div>
         </div>
         <div class="contact-item">
           <div class="contact-icon">🕐</div>
           <div>
             <div class="contact-detail-label">Hours</div>
-            <div class="contact-detail-val">Mon–Sat 8am–5pm</div>
+            <div class="contact-detail-val">Mon–Fri 8am–12pm<br><span style="font-size:13px;color:var(--text-muted)">By appointment Mon–Sat anytime</span></div>
           </div>
         </div>
       </div>
@@ -759,25 +759,25 @@ footer{
     <div class="contact-form fade-up">
       <div>
         <div class="form-title">Send a Message</div>
-        <div class="form-sub" style="margin-bottom:20px">We'll get back to you within one business day.</div>
+        <div class="form-sub" style="margin-bottom:20px">We'll get back to you as soon as possible.</div>
       </div>
       <div class="form-row">
         <div class="form-field">
           <label class="form-label">First Name</label>
-          <input type="text" placeholder="John">
+          <input type="text" id="cf-first" placeholder="John">
         </div>
         <div class="form-field">
           <label class="form-label">Last Name</label>
-          <input type="text" placeholder="Smith">
+          <input type="text" id="cf-last" placeholder="Smith">
         </div>
       </div>
       <div class="form-field">
         <label class="form-label">Phone</label>
-        <input type="tel" placeholder="(555) 000-0000">
+        <input type="tel" id="cf-phone" placeholder="(555) 000-0000">
       </div>
       <div class="form-field">
         <label class="form-label">I'm interested in…</label>
-        <select>
+        <select id="cf-interest">
           <option value="">Select one</option>
           <option>Buying a trailer</option>
           <option>Service / repair</option>
@@ -789,7 +789,7 @@ footer{
       </div>
       <div class="form-field">
         <label class="form-label">Message</label>
-        <textarea placeholder="Tell us what you're looking for or what's going on with your trailer…"></textarea>
+        <textarea id="cf-message" placeholder="Tell us what you're looking for or what's going on with your trailer…"></textarea>
       </div>
       <button class="form-submit" onclick="submitForm(this)">Send Message →</button>
       <div class="form-success" id="formSuccess">✓ Message sent! We'll be in touch soon.</div>
@@ -963,12 +963,29 @@ function toggleMobileMenu() {
 
 // ─── FORM ─────────────────────────────────────────────────────────────
 function submitForm(btn) {
-  btn.textContent = 'Sending…';
-  btn.disabled = true;
-  setTimeout(() => {
-    btn.style.display = 'none';
-    document.getElementById('formSuccess').style.display = 'block';
-  }, 800);
+  const first    = document.getElementById('cf-first').value.trim();
+  const last     = document.getElementById('cf-last').value.trim();
+  const phone    = document.getElementById('cf-phone').value.trim();
+  const interest = document.getElementById('cf-interest').value;
+  const message  = document.getElementById('cf-message').value.trim();
+
+  if (!first && !phone && !message) {
+    alert('Please fill in at least your name, phone, and message.');
+    return;
+  }
+
+  const subject = encodeURIComponent('Website Inquiry — ' + (interest || 'General') + ' — ' + first + ' ' + last);
+  const body = encodeURIComponent(
+    'Name: ' + first + ' ' + last + '\n' +
+    'Phone: ' + phone + '\n' +
+    'Interested In: ' + (interest || '—') + '\n\n' +
+    'Message:\n' + message
+  );
+
+  window.location.href = 'mailto:cole@springpointtrailersales.com?subject=' + subject + '&body=' + body;
+
+  btn.style.display = 'none';
+  document.getElementById('formSuccess').style.display = 'block';
 }
 
 // ─── SCROLL ANIMATIONS ────────────────────────────────────────────────
