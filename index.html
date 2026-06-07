@@ -610,73 +610,37 @@ footer{
   </div>
 </div>
 
-<!-- ── HQ FEATURE CALLOUT ── -->
+<!-- ── WHY BUY FROM US ── -->
 <div class="hq-section">
-  <div class="hq-inner">
-    <div class="fade-up">
-      <div class="hq-badge"><div class="dot"></div><span>Staff Portal</span></div>
-      <h2 class="section-title" style="font-size:clamp(36px,4vw,60px)">Dealership HQ</h2>
-      <p class="section-sub">Our full back-office management system. Inventory, sales, service work orders, parts, CRM, invoicing, and daily intelligence — all in one place.</p>
-      <div class="hq-features">
-        <div class="hq-feature">
-          <div class="hq-feat-num">01</div>
-          <div>
-            <div class="hq-feat-title">Inventory & Floor Plan Tracking</div>
-            <div class="hq-feat-desc">Every unit on lot with aging, floor plan interest, and profit tracking.</div>
-          </div>
-        </div>
-        <div class="hq-feature">
-          <div class="hq-feat-num">02</div>
-          <div>
-            <div class="hq-feat-title">Sales & CRM</div>
-            <div class="hq-feat-desc">Record sales, track leads through the pipeline, and follow up automatically.</div>
-          </div>
-        </div>
-        <div class="hq-feature">
-          <div class="hq-feat-num">03</div>
-          <div>
-            <div class="hq-feat-title">Service Work Orders</div>
-            <div class="hq-feat-desc">Open, track, and invoice service work. Parts inventory included.</div>
-          </div>
-        </div>
-        <div class="hq-feature">
-          <div class="hq-feat-num">04</div>
-          <div>
-            <div class="hq-feat-title">Intelligence & Daily Summary</div>
-            <div class="hq-feat-desc">Auto-generated insights from your live data. Export to Cowork each morning.</div>
-          </div>
-        </div>
-      </div>
-      <div class="hq-cta-wrap">
-        <a href="dealership-hq_1.html" class="btn-primary" target="_blank">Open HQ Portal →</a>
-      </div>
+  <div style="max-width:1200px;margin:0 auto;">
+    <div class="fade-up" style="text-align:center;margin-bottom:64px;">
+      <div class="section-eyebrow" style="justify-content:center;">The CTD/US Difference</div>
+      <h2 class="section-title">Why Buy From Us</h2>
+      <p class="section-sub" style="margin:0 auto;">We're not a big box dealer. We're a family owned business that treats every customer like a neighbor — because most of you are.</p>
     </div>
-    <div class="hq-visual fade-up">
-      <div class="hq-screen">
-        <div class="hq-screen-bar">
-          <div class="hq-screen-dot" style="background:#ef4444"></div>
-          <div class="hq-screen-dot" style="background:#eab308"></div>
-          <div class="hq-screen-dot" style="background:#22c55e"></div>
-          <span style="font-family:'DM Mono',monospace;font-size:10px;color:#555;margin-left:8px;letter-spacing:1px">DEALERSHIP HQ</span>
-        </div>
-        <div class="hq-kpis">
-          <div class="hq-kpi">
-            <div class="hq-kpi-label">On Lot</div>
-            <div class="hq-kpi-val" id="hq-kpi-lot">—</div>
-          </div>
-          <div class="hq-kpi">
-            <div class="hq-kpi-label">This Month</div>
-            <div class="hq-kpi-val" id="hq-kpi-month">—</div>
-          </div>
-          <div class="hq-kpi">
-            <div class="hq-kpi-label">Revenue</div>
-            <div class="hq-kpi-val" id="hq-kpi-rev">—</div>
-          </div>
-        </div>
-        <div class="hq-rows" id="hq-preview-rows">
-          <div class="hq-row"><span class="hq-row-label">Loading from HQ…</span><span class="hq-row-val">—</span></div>
-        </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);" class="fade-up">
+
+      <div style="background:var(--surface2);padding:48px 40px;border-bottom:3px solid #fff;">
+        <div style="font-size:48px;margin-bottom:24px;">🤝</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:#fff;margin-bottom:12px;">Family Owned</div>
+        <div style="font-size:14px;color:var(--text-muted);line-height:1.7;">We're not a franchise or a chain. When you buy from us you're dealing directly with the owner — someone who stands behind every sale and is here when you need us.</div>
       </div>
+
+      <div style="background:var(--surface2);padding:48px 40px;border-bottom:3px solid var(--green);">
+        <div style="font-size:48px;margin-bottom:24px;">🔄</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:#fff;margin-bottom:12px;">We Take Trades</div>
+        <div style="font-size:14px;color:var(--text-muted);line-height:1.7;">Got a trailer you're looking to move? We accept trade-ins and make the process simple. Bring it in and we'll give you a fair offer on the spot — no runaround.</div>
+      </div>
+
+      <div style="background:var(--surface2);padding:48px 40px;border-bottom:3px solid var(--blue);">
+        <div style="font-size:48px;margin-bottom:24px;">💳</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:#fff;margin-bottom:12px;">Financing Available</div>
+        <div style="font-size:14px;color:var(--text-muted);line-height:1.7;">Don't let budget hold you back. We offer financing options to help you get the trailer you need today. Ask us about rates and terms — we'll work with you.</div>
+      </div>
+
+    </div>
+    <div class="fade-up" style="text-align:center;margin-top:40px;">
+      <a href="#contact" class="btn-primary">Talk to Us Today →</a>
     </div>
   </div>
 </div>
@@ -948,7 +912,6 @@ async function loadFromSupabase() {
     const data = await res.json();
     if (data && data.length > 0) {
       renderInventoryGrid(data);
-      updateHQWidget(data);
     }
   } catch(e) {
     console.warn('Could not load from Supabase, using samples:', e);
