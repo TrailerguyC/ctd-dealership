@@ -870,8 +870,17 @@ function renderFiltered() {
     const price = u.ask_price ? parseFloat(u.ask_price).toLocaleString('en-US', {minimumFractionDigits:0}) : 'Call for Price';
     const statusClass = u.status === 'pending' ? 'pending' : (u.status === 'sold' ? 'sold' : '');
     const statusLabel = u.status === 'consignment' ? 'Consignment' : (u.status === 'pending' ? 'Pending' : 'Available');
+    // Parse photos — stored as JSON string from Supabase
+    let photos = [];
+    try { photos = u.photos ? (typeof u.photos === 'string' ? JSON.parse(u.photos) : u.photos) : []; } catch(e){}
+    const photoHTML = photos.length
+      ? `<div style="aspect-ratio:16/9;overflow:hidden;margin:-28px -28px 20px;background:var(--surface3);">
+           <img src="${photos[0]}" style="width:100%;height:100%;object-fit:cover;display:block;">
+         </div>`
+      : '';
     return `
       <div class="unit-card" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
+        ${photoHTML}
         <div class="unit-tag">
           <span class="tag-pill ${statusClass}">${statusLabel}</span>
           ${u.type || 'Trailer'}
