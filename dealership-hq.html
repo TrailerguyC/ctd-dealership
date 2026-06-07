@@ -1355,6 +1355,7 @@ async function syncInventoryToSupabase() {
       description: u.notes || null,
       floorplan: u.floorplan ? parseFloat(u.floorplan) : null,
       invoice_num: u.invoice_num || null,
+      photos: (u.photos && u.photos.length) ? JSON.stringify(u.photos) : null,
     }));
     const res = await fetch(SB_URL + '/rest/v1/inventory', {
       method: 'POST',
@@ -2478,6 +2479,8 @@ async function uploadUnitPhotos(input) {
     ? `✓ ${uploaded} photo${uploaded > 1 ? 's' : ''} uploaded`
     : '✗ Upload failed — check connection';
   renderUnitPhotos(unit.photos);
+  // Immediately sync so website shows photos without needing to hit Save Unit
+  syncInventoryToSupabase();
   input.value = '';
 }
 
