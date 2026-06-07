@@ -1026,38 +1026,6 @@ window.addEventListener('scroll', () => {
   nav.style.borderBottomColor = window.scrollY > 60 ? 'var(--border2)' : 'var(--border)';
 });
 
-// ─── MOBILE MENU ──────────────────────────────────────────────────────
-function toggleMobileMenu(){
-  document.getElementById('mobileMenu').classList.toggle('open');
-}
-
-// ─── FORM ─────────────────────────────────────────────────────────────
-function submitForm(btn){
-  btn.textContent = 'Sending…';
-  btn.disabled = true;
-  setTimeout(() => {
-    btn.style.display = 'none';
-    document.getElementById('formSuccess').style.display = 'block';
-  }, 800);
-}
-
-// ─── SCROLL ANIMATIONS ────────────────────────────────────────────────
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry, i) => {
-    if(entry.isIntersecting){
-      setTimeout(() => entry.target.classList.add('visible'), i * 80);
-      observer.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.1 });
-
-document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
-
-// ─── NAVBAR SCROLL ────────────────────────────────────────────────────
-window.addEventListener('scroll', () => {
-  const nav = document.getElementById('navbar');
-  nav.style.borderBottomColor = window.scrollY > 60 ? 'var(--border2)' : 'var(--border)';
-});
 </script>
 </body>
 </html>
