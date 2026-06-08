@@ -47,30 +47,43 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 /* ── TOPNAV ── */
 .topnav{
   height:60px;background:#000;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;padding:0 28px;gap:0;flex-shrink:0;
+  display:flex;align-items:center;padding:0 0 0 28px;gap:0;flex-shrink:0;
   position:relative;z-index:50;overflow:hidden;
 }
 .logo{
   font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:4px;
-  color:#fff;margin-right:24px;white-space:nowrap;flex-shrink:0;
+  color:#fff;margin-right:16px;white-space:nowrap;flex-shrink:0;
 }
 .logo em{color:var(--text-muted);font-style:normal;font-size:14px;letter-spacing:1px;margin-left:8px;}
 .nav-tabs{
-  display:flex;gap:2px;flex:1;
+  display:flex;gap:2px;
   overflow-x:auto;overflow-y:hidden;
   scrollbar-width:none;-ms-overflow-style:none;
   scroll-behavior:smooth;
+  flex:1;min-width:0;
+  -webkit-overflow-scrolling:touch;
 }
 .nav-tabs::-webkit-scrollbar{display:none;}
 .ntab{
-  padding:7px 18px;border-radius:0;font-size:12px;font-weight:600;
+  padding:7px 16px;border-radius:0;font-size:12px;font-weight:600;
   letter-spacing:1px;text-transform:uppercase;cursor:pointer;color:var(--text-muted);
   border:none;background:none;font-family:'DM Sans',sans-serif;transition:all .15s;
-  border-bottom:2px solid transparent;white-space:nowrap;flex-shrink:0;
+  border-bottom:2px solid transparent;white-space:nowrap;flex-shrink:0;height:60px;
 }
 .ntab:hover{color:var(--text);}
 .ntab.active{color:#fff;border-bottom-color:#fff;}
-.nav-right{display:flex;align-items:center;gap:12px;margin-left:12px;flex-shrink:0;}
+.nav-right{
+  display:flex;align-items:center;gap:8px;
+  padding:0 12px;flex-shrink:0;
+  border-left:1px solid var(--border);height:60px;background:#000;
+}
+.live-badge{
+  display:flex;align-items:center;gap:6px;
+  font-family:'DM Mono',monospace;font-size:11px;color:var(--text-muted);
+}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+#liveClock{font-family:'DM Mono',monospace;font-size:11px;color:var(--text-muted);}
 .live-badge{
   display:flex;align-items:center;gap:6px;
   font-family:'DM Mono',monospace;font-size:11px;color:var(--text-muted);
@@ -2204,19 +2217,19 @@ function renderInvTable(){
   if(!rows.length){body.innerHTML=`<tr><td colspan="13" class="empty" style="padding:32px"><span class="empty-big" style="font-size:24px">Empty</span>No units match.</td></tr>`;return;}
   const pm={available:'p-green',sold:'p-gray',pending:'p-yellow',traded:'p-purple',consignment:'p-orange'};
   const checkLabels={photos:'📷',listed:'🌐',washed:'🚿',detail:'✨',service:'🔧',title:'📄',price:'💲',repair:'⚠',followup:'📞',tires:'⭕',lights:'💡',fp_due:'💰'};
-  body.innerHTML=rows.map(u=>{
+
+  const makeRow = u => {
     const d=dol(u);
     const dc=!d?'':d>90?'style="color:var(--red)"':d>60?'style="color:var(--yellow)"':'';
-    // Checklist flags
     const flags=u.checklist?Object.entries(u.checklist).filter(([k,v])=>v).map(([k])=>`<span title="${k.replace(/_/g,' ')}" style="font-size:11px;cursor:default">${checkLabels[k]||'•'}</span>`).join(''):'';
-    // FP interest
     let fpInfo='—';
     if(u.floorplan&&u.fp_rate){
       const daily=(parseFloat(u.floorplan))*(parseFloat(u.fp_rate)/100)/365;
       fpInfo=`<span style="color:var(--yellow);font-size:11px">$${daily.toFixed(2)}/d</span>`;
     }
     const saleInfo=u.sale_price?fmt(parseFloat(u.sale_price)):'—';
-    return`<tr>
+    const isSold = u.status === 'sold';
+    return`<tr style="${isSold?'opacity:.55;':''}">
       <td class="mono" style="color:var(--text-muted);font-size:11px">${u.invoice_num||'—'}</td>
       <td class="mono">${u.stock||'—'}</td>
       <td>${u.year||'—'}</td><td>${u.make||'—'}</td><td>${u.model||'—'}</td>
@@ -2234,7 +2247,24 @@ function renderInvTable(){
         <button class="btn btn-red btn-sm" onclick="delUnit('${u.id}')">Del</button>
       </td>
     </tr>`;
-  }).join('');
+  };
+
+  // Split active and sold
+  const active = rows.filter(u => u.status !== 'sold');
+  const sold   = rows.filter(u => u.status === 'sold');
+
+  let html = active.map(makeRow).join('');
+
+  if (sold.length) {
+    html += `<tr>
+      <td colspan="14" style="padding:12px 16px;background:var(--surface2);border-top:2px solid var(--border2);">
+        <span style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);">— Sold Units (${sold.length}) —</span>
+      </td>
+    </tr>`;
+    html += sold.map(makeRow).join('');
+  }
+
+  body.innerHTML = html;
 }
 
 // ══════════════════════════════════════════
