@@ -41,7 +41,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;background:rgba(
 .unit-card{background:var(--surface);cursor:pointer;transition:background .15s;position:relative;overflow:hidden;display:flex;flex-direction:column;}
 .unit-card:hover{background:var(--surface2);}
 .unit-photo{aspect-ratio:16/9;overflow:hidden;background:var(--surface3);position:relative;}
-.unit-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s;}
+.unit-photo img{width:100%;height:100%;object-fit:contain;display:block;transition:transform .3s;}
 .unit-card:hover .unit-photo img{transform:scale(1.03);}
 .unit-photo-none{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:32px;color:var(--border2);}
 .unit-body{padding:24px;flex:1;display:flex;flex-direction:column;}

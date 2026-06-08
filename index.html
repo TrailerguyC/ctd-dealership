@@ -863,7 +863,7 @@ function renderFiltered() {
     try { photos = u.photos ? (typeof u.photos === 'string' ? JSON.parse(u.photos) : u.photos) : []; } catch(e){}
     const soldOverlay = isSold ? '<div style="position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;"><span style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;letter-spacing:4px;color:#fff;border:2px solid #fff;padding:6px 18px;">SOLD</span></div>' : '';
     const photoHTML = photos.length
-      ? `<div style="aspect-ratio:16/9;overflow:hidden;margin:-28px -28px 20px;background:var(--surface3);position:relative;"><img src="${photos[0]}" style="width:100%;height:100%;object-fit:cover;display:block;">${soldOverlay}</div>`
+      ? `<div style="aspect-ratio:16/9;overflow:hidden;margin:-28px -28px 20px;background:var(--surface3);position:relative;"><img src="${photos[0]}" style="width:100%;height:100%;object-fit:contain;display:block;">${soldOverlay}</div>`
       : (isSold ? `<div style="aspect-ratio:16/9;margin:-28px -28px 20px;background:var(--surface3);position:relative;display:flex;align-items:center;justify-content:center;"><span style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:4px;color:var(--text-muted);border:2px solid var(--border2);padding:6px 18px;">SOLD</span></div>` : '');
     return `
       <div class="unit-card" style="${isSold ? 'cursor:default;' : ''}" ${isSold ? '' : `onclick="window.location='trailer.html?id=${u.id}'"`}>
