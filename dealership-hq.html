@@ -2460,6 +2460,10 @@ function saveUnit(){
       price: r.querySelector('.addon-price')?.value||''
     })).filter(a=>a.name||a.price)
   };
+  // If marking as sold, stamp sale_date automatically
+  if (u.status === 'sold' && !u.sale_date) {
+    u.sale_date = new Date().toISOString().split('T')[0];
+  }
   if(editUnitId){const i=inventory.findIndex(u=>u.id===editUnitId);if(i!==-1)inventory[i]=u;}
   else inventory.push(u);
   saveData();closeOverlay('unitOverlay');refreshAll();
