@@ -601,6 +601,7 @@ footer{
     </div>
   </div>
   <div class="inv-grid fade-up" id="inventoryGrid"></div>
+  <div id="debugMsg" style="max-width:1200px;margin:12px auto;padding:10px 16px;font-family:'DM Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:1px;"></div>
   <div class="inv-cta" style="margin-top:32px;display:flex;gap:16px;justify-content:center;">
     <a href="inventory.html" class="btn-primary">View All Inventory →</a>
     <a href="#contact" class="btn-ghost">Don't see what you need? Ask us</a>
@@ -923,7 +924,8 @@ async function loadFromSupabase() {
       throw new Error('Fetch failed: ' + txt);
     }
     const data = await res.json();
-    console.log('Supabase returned', data.length, 'units');
+    const dbg = document.getElementById('debugMsg');
+    if (dbg) dbg.textContent = '✓ Loaded ' + data.length + ' units from database';
     if (data && data.length > 0) {
       const now = new Date();
       const filtered = data.filter(u => {
@@ -935,7 +937,8 @@ async function loadFromSupabase() {
       renderInventoryGrid(filtered);
     }
   } catch(e) {
-    console.warn('Could not load from Supabase, using samples:', e);
+    const dbg = document.getElementById('debugMsg');
+    if (dbg) dbg.textContent = '✗ Database error: ' + e.message;
   }
 }
 
