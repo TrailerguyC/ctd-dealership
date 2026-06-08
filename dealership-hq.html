@@ -1658,8 +1658,8 @@ function dol(u){
 }
 function fmt(n){
   if(!n&&n!==0)return'—';
-  if(n>=1000000)return'$'+(n/1000000).toFixed(1)+'M';
-  if(n>=1000)return'$'+(n/1000).toFixed(0)+'K';
+  if(n>=1000000)return'$'+(n/1000000).toFixed(2)+'M';
+  return'$'+n.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});
   return'$'+n.toLocaleString();
 }
 function monthlySales(yr){
