@@ -1141,6 +1141,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
         <div class="fi"><label class="fl">VIN / Serial</label><input id="u_vin" type="text"></div>
         <div class="fi"><label class="fl">Color</label><input id="u_color" type="text"></div>
         <div class="fi"><label class="fl">Length</label><input id="u_length" type="text"></div>
+        <div class="fi"><label class="fl">GVWR</label><input id="u_gvwr" type="text" placeholder="e.g. 14,000 lbs"></div>
       </div>
       <div class="msec">Pricing &amp; Status</div>
       <div class="fg">
@@ -1250,7 +1251,9 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
         </label>
         <div id="u_photo_status" style="font-size:11px;color:var(--text-muted);"></div>
       </div>
-      <div class="msec">Notes</div>
+      <div class="msec">Public Description</div>
+      <div class="fg"><div class="fi full"><textarea id="u_description" rows="3" placeholder="Describe this trailer for the website — features, condition, accessories, etc."></textarea></div></div>
+      <div class="msec">Internal Notes</div>
       <div class="fg"><div class="fi full"><textarea id="u_notes" rows="2"></textarea></div></div>
     </div>
     <div class="modal-ft">
@@ -1371,7 +1374,8 @@ async function syncInventoryToSupabase() {
       sale_price: u.sale_price ? parseFloat(u.sale_price) : null,
       sale_date: u.sale_date || null,
       buyer: u.buyer || null,
-      description: u.notes || null,
+      description: u.description || u.notes || null,
+      gvwr: u.gvwr || null,
       floorplan: u.floorplan ? parseFloat(u.floorplan) : null,
       invoice_num: u.invoice_num || null,
       photos: (u.photos && u.photos.length) ? JSON.stringify(u.photos) : null,
@@ -2413,7 +2417,7 @@ function openUnitModal(id){
   if(id){
     const u=inventory.find(u=>u.id===id);
     if(u){
-      ['stock','year','make','model','type','vin','color','length','msrp','ask','cost','floorplan','fp_rate','fp_start','date_in','status','notes',
+      ['stock','year','make','model','type','vin','color','length','gvwr','msrp','ask','cost','floorplan','fp_rate','fp_start','date_in','status','notes','description',
        'sale_price','sale_date','buyer','buyer_phone','buyer_addr','sale_finance','lender','down_payment',
        'tax_pct','tax_amt','title_fee','license_fee','doc_fee','prep_fee',
        'owner','owner_phone','owner_ask','consign_pct','consign_fee','consign_start'].forEach(f=>{const el=document.getElementById('u_'+f);if(el)el.value=u[f]||'';});
@@ -2444,6 +2448,7 @@ function saveUnit(){
     vin:g('u_vin'),color:g('u_color'),length:g('u_length'),msrp:g('u_msrp'),ask:g('u_ask'),
     cost:g('u_cost'),floorplan:g('u_floorplan'),fp_rate:g('u_fp_rate'),fp_start:g('u_fp_start'),
     date_in:g('u_date_in'),status:g('u_status'),notes:g('u_notes'),
+    gvwr:g('u_gvwr'),description:g('u_description'),
     sale_price:g('u_sale_price'),sale_date:g('u_sale_date'),buyer:g('u_buyer'),
     buyer_phone:g('u_buyer_phone'),buyer_addr:g('u_buyer_addr'),sale_finance:g('u_sale_finance'),
     lender:g('u_lender'),down_payment:g('u_down_payment'),
