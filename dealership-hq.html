@@ -325,6 +325,8 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
     <button class="ntab" onclick="showPage('trends',this)">Trends</button>
     <button class="ntab" onclick="showPage('suggestions',this)">Intelligence</button>
     <button class="ntab" onclick="showPage('crm',this)">CRM</button>
+    <button class="ntab" onclick="showPage('ads',this)">Ad Tracker</button>
+    <button class="ntab" onclick="showPage('pnl',this)">P&amp;L</button>
     <button class="ntab" onclick="showPage('settings',this)">⚙ Settings</button>
   </div>
   <div class="nav-right">
@@ -1001,6 +1003,117 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   </div>
 </div>
 
+<!-- ═══════════════ AD TRACKER ═══════════════ -->
+<div class="page" id="page-ads">
+  <div class="page-hd">
+    <div><div class="page-title">Ad Tracker</div><div class="page-sub">Track your advertising spend and performance across all platforms.</div></div>
+    <button class="btn btn-primary" onclick="openAdModal()">+ New Ad</button>
+  </div>
+
+  <!-- KPI Row -->
+  <div class="kpi-row" id="adsKpiRow">
+    <div class="kpi c-white"><div class="kpi-label">Total Spend</div><div class="kpi-value" id="ad-k-spend">$0</div><div class="kpi-sub">all time</div></div>
+    <div class="kpi c-green"><div class="kpi-label">Total Leads</div><div class="kpi-value" id="ad-k-leads">0</div><div class="kpi-sub">generated</div></div>
+    <div class="kpi c-yellow"><div class="kpi-label">Cost Per Lead</div><div class="kpi-value" id="ad-k-cpl">—</div><div class="kpi-sub">avg across ads</div></div>
+    <div class="kpi c-blue"><div class="kpi-label">Units Sold</div><div class="kpi-value" id="ad-k-sold">0</div><div class="kpi-sub">attributed to ads</div></div>
+    <div class="kpi c-red"><div class="kpi-label">Cost Per Sale</div><div class="kpi-value" id="ad-k-cps">—</div><div class="kpi-sub">avg across ads</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd">
+      <div><div class="card-title">Active &amp; Past Campaigns</div></div>
+      <div style="display:flex;gap:8px;">
+        <select class="fsel" id="adPlatformFilter" onchange="renderAdsTable()">
+          <option value="">All Platforms</option>
+          <option>Facebook</option>
+          <option>Instagram</option>
+          <option>Google</option>
+          <option>Craigslist</option>
+          <option>TikTok</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="tbl">
+        <thead><tr>
+          <th>Platform</th><th>Campaign</th><th>Start</th><th>End</th>
+          <th>Spend</th><th>Leads</th><th>Sales</th><th>CPL</th><th>CPS</th><th>Status</th><th>Notes</th><th></th>
+        </tr></thead>
+        <tbody id="adsBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Platform breakdown chart -->
+  <div class="g31">
+    <div class="card" style="grid-column:1/3">
+      <div class="card-hd"><div class="card-title">Spend by Platform</div></div>
+      <div class="card-body" id="adsPlatformBreakdown" style="display:flex;flex-direction:column;gap:10px;"></div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><div class="card-title">Best Performing</div></div>
+      <div class="card-body" id="adsBestPerforming" style="font-size:13px;color:var(--text-muted);"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ P&L ═══════════════ -->
+<div class="page" id="page-pnl">
+  <div class="page-hd">
+    <div><div class="page-title">Profit &amp; Loss</div><div class="page-sub">Quarterly P&amp;L statements generated from your sales and cost data.</div></div>
+    <div style="display:flex;gap:8px;">
+      <select class="fsel" id="pnlYear" onchange="renderPnL()"></select>
+      <select class="fsel" id="pnlQuarter" onchange="renderPnL()">
+        <option value="">Full Year</option>
+        <option value="1">Q1 (Jan–Mar)</option>
+        <option value="2">Q2 (Apr–Jun)</option>
+        <option value="3">Q3 (Jul–Sep)</option>
+        <option value="4">Q4 (Oct–Dec)</option>
+      </select>
+      <button class="btn btn-ghost btn-sm" onclick="exportPnL()">↓ Export</button>
+    </div>
+  </div>
+
+  <!-- KPI Row -->
+  <div class="kpi-row">
+    <div class="kpi c-green"><div class="kpi-label">Gross Revenue</div><div class="kpi-value" id="pnl-revenue">$0</div><div class="kpi-sub">total sales</div></div>
+    <div class="kpi c-red"><div class="kpi-label">Cost of Goods</div><div class="kpi-value" id="pnl-cogs">$0</div><div class="kpi-sub">inventory cost</div></div>
+    <div class="kpi c-white"><div class="kpi-label">Gross Profit</div><div class="kpi-value" id="pnl-gross">$0</div><div class="kpi-sub">revenue − COGS</div></div>
+    <div class="kpi c-yellow"><div class="kpi-label">Ad Spend</div><div class="kpi-value" id="pnl-adspend">$0</div><div class="kpi-sub">marketing costs</div></div>
+    <div class="kpi c-blue"><div class="kpi-label">Net Profit</div><div class="kpi-value" id="pnl-net">$0</div><div class="kpi-sub">gross − ad spend</div></div>
+  </div>
+
+  <div class="g31">
+    <!-- P&L Statement -->
+    <div class="card" style="grid-column:1/3">
+      <div class="card-hd"><div class="card-title" id="pnlStatementTitle">P&amp;L Statement</div></div>
+      <div class="card-body">
+        <table class="tbl" id="pnlTable">
+          <thead><tr><th>Category</th><th>Item</th><th style="text-align:right">Amount</th></tr></thead>
+          <tbody id="pnlBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <!-- Quarter History -->
+    <div class="card">
+      <div class="card-hd"><div class="card-title">Quarter History</div></div>
+      <div class="card-body" id="pnlHistory" style="display:flex;flex-direction:column;gap:0;"></div>
+    </div>
+  </div>
+
+  <!-- Sales breakdown -->
+  <div class="card">
+    <div class="card-hd"><div class="card-title">Sales Detail</div></div>
+    <div style="overflow-x:auto;">
+      <table class="tbl">
+        <thead><tr><th>Date</th><th>Unit</th><th>Stock #</th><th>Sale Price</th><th>Cost</th><th>Profit</th><th>Margin</th><th>Finance</th></tr></thead>
+        <tbody id="pnlSalesBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
 </div><!-- /app-body -->
 
 <!-- ══ WORK ORDER MODAL ══ -->
@@ -1138,6 +1251,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
         <div class="fi"><label class="fl">Make</label><input id="u_make" type="text"></div>
         <div class="fi"><label class="fl">Model</label><input id="u_model" type="text"></div>
         <div class="fi"><label class="fl">Type</label><select id="u_type"><option value="">—</option><option>Cargo Trailer</option><option>Utility Trailer</option><option>Horse Trailer</option><option>Livestock Trailer</option><option>Living Quarters</option><option>Equipment Trailer</option><option>Flatbed</option><option>Other</option></select></div>
+        <div class="fi"><label class="fl">Condition</label><select id="u_condition"><option value="">—</option><option value="New">New</option><option value="Pre-Owned">Pre-Owned</option><option value="Consignment">Consignment</option></select></div>
         <div class="fi"><label class="fl">VIN / Serial</label><input id="u_vin" type="text"></div>
         <div class="fi"><label class="fl">Color</label><input id="u_color" type="text"></div>
         <div class="fi"><label class="fl">Length</label><input id="u_length" type="text"></div>
@@ -1363,6 +1477,7 @@ async function syncInventoryToSupabase() {
       make: u.make || null,
       model: u.model || null,
       type: u.type || null,
+      condition: u.condition || null,
       vin: u.vin || null,
       color: u.color || null,
       length: u.length || null,
@@ -1439,6 +1554,7 @@ let inventory = JSON.parse(localStorage.getItem('hq_inv')||'[]');
 let sales = JSON.parse(localStorage.getItem('hq_sales')||'[]');
 let calEvents = JSON.parse(localStorage.getItem('hq_cal')||'[]');
 let tasks = JSON.parse(localStorage.getItem('hq_tasks')||'[]');
+let ads = JSON.parse(localStorage.getItem('hq_ads')||'[]');
 let editUnitId=null, editSaleId=null, editCalId=null;
 let calYear=new Date().getFullYear(), calMonth=new Date().getMonth();
 
@@ -1471,7 +1587,7 @@ function saveData(){
   localStorage.setItem('hq_sales',JSON.stringify(sales));
   localStorage.setItem('hq_cal',JSON.stringify(calEvents));
   localStorage.setItem('hq_tasks',JSON.stringify(tasks));
-  // Sync inventory to Supabase so the live website stays updated
+  localStorage.setItem('hq_ads',JSON.stringify(ads));
   syncInventoryToSupabase();
 }
 function genId(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
@@ -1561,6 +1677,7 @@ function refreshAll(){
   buildCharts();buildSuggestions();buildTrends();updateHeatMap();updateCalMonthSummary();
   renderUpcoming();updateServiceKPIs();renderWOTable();updatePartsKPIs();renderPartsTable();
   updateCRMKPIs();renderCRMTable();
+  renderAdsTable();renderPnL();
 }
 
 // ══════════════════════════════════════════
@@ -2417,7 +2534,7 @@ function openUnitModal(id){
   if(id){
     const u=inventory.find(u=>u.id===id);
     if(u){
-      ['stock','year','make','model','type','vin','color','length','gvwr','msrp','ask','cost','floorplan','fp_rate','fp_start','date_in','status','notes','description',
+      ['stock','year','make','model','type','condition','vin','color','length','gvwr','msrp','ask','cost','floorplan','fp_rate','fp_start','date_in','status','notes','description',
        'sale_price','sale_date','buyer','buyer_phone','buyer_addr','sale_finance','lender','down_payment',
        'tax_pct','tax_amt','title_fee','license_fee','doc_fee','prep_fee',
        'owner','owner_phone','owner_ask','consign_pct','consign_fee','consign_start'].forEach(f=>{const el=document.getElementById('u_'+f);if(el)el.value=u[f]||'';});
@@ -2444,7 +2561,7 @@ function saveUnit(){
   const existingUnit = editUnitId ? inventory.find(u=>u.id===editUnitId) : null;
   const u={
     id:editUnitId||genId(),
-    stock:g('u_stock'),year:g('u_year'),make:g('u_make'),model:g('u_model'),type:g('u_type'),
+    stock:g('u_stock'),year:g('u_year'),make:g('u_make'),model:g('u_model'),type:g('u_type'),condition:g('u_condition'),
     vin:g('u_vin'),color:g('u_color'),length:g('u_length'),msrp:g('u_msrp'),ask:g('u_ask'),
     cost:g('u_cost'),floorplan:g('u_floorplan'),fp_rate:g('u_fp_rate'),fp_start:g('u_fp_start'),
     date_in:g('u_date_in'),status:g('u_status'),notes:g('u_notes'),
@@ -3692,12 +3809,7 @@ function exportAllData(){
   const payload = {
     version: 1,
     exported: new Date().toISOString(),
-    inventory,
-    sales,
-    calEvents,
-    workOrders,
-    partsInventory,
-    contacts
+    inventory, sales, calEvents, workOrders, partsInventory, contacts, ads
   };
   const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
   const url = URL.createObjectURL(blob);
@@ -3726,6 +3838,7 @@ function importAllData(event){
       if(data.workOrders)    { workOrders = data.workOrders;     localStorage.setItem('hq_wo', JSON.stringify(workOrders)); }
       if(data.partsInventory){ partsInventory = data.partsInventory; localStorage.setItem('hq_parts', JSON.stringify(partsInventory)); }
       if(data.contacts)      { contacts = data.contacts;         localStorage.setItem('hq_crm', JSON.stringify(contacts)); }
+      if(data.ads)           { ads = data.ads;                   localStorage.setItem('hq_ads', JSON.stringify(ads)); }
       refreshAll();
       syncInventoryToSupabase();
       alert('✓ Data imported! All records loaded and syncing to your live website.');
@@ -3924,6 +4037,312 @@ renderCRMTable();
     </div>
   </div>
 </div>
+
+<!-- ══ AD MODAL ══ -->
+<div class="overlay" id="adOverlay">
+  <div class="modal" style="max-width:640px">
+    <div class="modal-hd">
+      <div class="modal-hd-title" id="adModalTitle">New Ad Campaign</div>
+      <button class="btn-icon btn btn-ghost" onclick="closeOverlay('adOverlay')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="fg">
+        <div class="fi"><label class="fl">Platform</label>
+          <select id="ad_platform">
+            <option value="">Select</option>
+            <option>Facebook</option><option>Instagram</option><option>Google</option>
+            <option>Craigslist</option><option>TikTok</option><option>Other</option>
+          </select>
+        </div>
+        <div class="fi"><label class="fl">Campaign Name</label><input id="ad_name" type="text" placeholder="e.g. Spring Utility Sale"></div>
+        <div class="fi"><label class="fl">Start Date</label><input id="ad_start" type="date"></div>
+        <div class="fi"><label class="fl">End Date</label><input id="ad_end" type="date"></div>
+        <div class="fi"><label class="fl">Total Spend ($)</label><input id="ad_spend" type="number" placeholder="0.00"></div>
+        <div class="fi"><label class="fl">Leads Generated</label><input id="ad_leads" type="number" placeholder="0"></div>
+        <div class="fi"><label class="fl">Units Sold from Ad</label><input id="ad_sales" type="number" placeholder="0"></div>
+        <div class="fi"><label class="fl">Status</label>
+          <select id="ad_status"><option value="active">Active</option><option value="paused">Paused</option><option value="ended">Ended</option></select>
+        </div>
+        <div class="fi full"><label class="fl">Notes</label><textarea id="ad_notes" rows="2" placeholder="Any notes about this campaign…"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-ghost" onclick="closeOverlay('adOverlay')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveAd()">Save Campaign</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// AD TRACKER
+// ══════════════════════════════════════════
+let editAdId = null;
+
+function openAdModal(id) {
+  editAdId = id || null;
+  document.getElementById('adModalTitle').textContent = id ? 'Edit Campaign' : 'New Ad Campaign';
+  document.querySelectorAll('#adOverlay input,#adOverlay select,#adOverlay textarea').forEach(el=>el.value='');
+  document.getElementById('ad_status').value = 'active';
+  if (id) {
+    const a = ads.find(a=>a.id===id);
+    if (a) {
+      ['platform','name','start','end','spend','leads','sales','status','notes'].forEach(f=>{
+        const el = document.getElementById('ad_'+f);
+        if (el) el.value = a[f] || '';
+      });
+    }
+  }
+  openOverlay('adOverlay');
+}
+
+function saveAd() {
+  const g = id => document.getElementById(id)?.value || '';
+  const a = {
+    id: editAdId || genId(),
+    platform: g('ad_platform'), name: g('ad_name'),
+    start: g('ad_start'), end: g('ad_end'),
+    spend: parseFloat(g('ad_spend')) || 0,
+    leads: parseInt(g('ad_leads')) || 0,
+    sales: parseInt(g('ad_sales')) || 0,
+    status: g('ad_status'), notes: g('ad_notes')
+  };
+  if (editAdId) { const i = ads.findIndex(a=>a.id===editAdId); if(i!==-1) ads[i]=a; }
+  else ads.push(a);
+  localStorage.setItem('hq_ads', JSON.stringify(ads));
+  closeOverlay('adOverlay');
+  renderAdsTable();
+}
+
+function delAd(id) {
+  if (!confirm('Delete this ad campaign?')) return;
+  ads = ads.filter(a=>a.id!==id);
+  localStorage.setItem('hq_ads', JSON.stringify(ads));
+  renderAdsTable();
+}
+
+function renderAdsTable() {
+  const pf = document.getElementById('adPlatformFilter')?.value || '';
+  const body = document.getElementById('adsBody');
+  if (!body) return;
+
+  let rows = ads.filter(a => !pf || a.platform === pf);
+  rows.sort((a,b) => new Date(b.start||0) - new Date(a.start||0));
+
+  // Update KPIs
+  const totalSpend = ads.reduce((s,a)=>s+a.spend,0);
+  const totalLeads = ads.reduce((s,a)=>s+a.leads,0);
+  const totalSales = ads.reduce((s,a)=>s+a.sales,0);
+  document.getElementById('ad-k-spend').textContent = fmt(totalSpend);
+  document.getElementById('ad-k-leads').textContent = totalLeads;
+  document.getElementById('ad-k-sold').textContent = totalSales;
+  document.getElementById('ad-k-cpl').textContent = totalLeads ? fmt(totalSpend/totalLeads) : '—';
+  document.getElementById('ad-k-cps').textContent = totalSales ? fmt(totalSpend/totalSales) : '—';
+
+  if (!rows.length) { body.innerHTML = `<tr><td colspan="12" style="padding:32px;text-align:center;color:var(--text-muted)">No ad campaigns yet. Click + New Ad to add one.</td></tr>`; return; }
+
+  const statusPill = s => s==='active'?'p-green':s==='paused'?'p-yellow':'p-gray';
+  body.innerHTML = rows.map(a => {
+    const cpl = a.leads ? '$'+(a.spend/a.leads).toFixed(2) : '—';
+    const cps = a.sales ? '$'+(a.spend/a.sales).toFixed(2) : '—';
+    return `<tr>
+      <td><span class="pill p-blue" style="font-size:10px;">${a.platform||'—'}</span></td>
+      <td style="font-weight:600">${a.name||'—'}</td>
+      <td class="mono" style="font-size:11px">${a.start||'—'}</td>
+      <td class="mono" style="font-size:11px">${a.end||'—'}</td>
+      <td class="mono">${a.spend?fmt(a.spend):'—'}</td>
+      <td>${a.leads||0}</td>
+      <td>${a.sales||0}</td>
+      <td class="mono" style="font-size:11px">${cpl}</td>
+      <td class="mono" style="font-size:11px">${cps}</td>
+      <td><span class="pill ${statusPill(a.status)}">${a.status||'—'}</span></td>
+      <td style="font-size:11px;color:var(--text-muted);max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${a.notes||''}</td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-ghost btn-sm" onclick="openAdModal('${a.id}')">Edit</button>
+        <button class="btn btn-red btn-sm" onclick="delAd('${a.id}')">Del</button>
+      </td>
+    </tr>`;
+  }).join('');
+
+  // Platform breakdown
+  const byPlatform = {};
+  ads.forEach(a=>{ byPlatform[a.platform||'Other'] = (byPlatform[a.platform||'Other']||0) + a.spend; });
+  const maxSpend = Math.max(...Object.values(byPlatform), 1);
+  const breakdown = document.getElementById('adsPlatformBreakdown');
+  if (breakdown) {
+    breakdown.innerHTML = Object.entries(byPlatform).sort((a,b)=>b[1]-a[1]).map(([p,s])=>`
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span style="width:100px;font-size:12px;color:var(--text-mid)">${p}</span>
+        <div style="flex:1;background:var(--surface3);height:8px;"><div style="width:${(s/maxSpend*100).toFixed(1)}%;background:#fff;height:100%;"></div></div>
+        <span style="font-family:'DM Mono',monospace;font-size:12px;width:80px;text-align:right">${fmt(s)}</span>
+      </div>`).join('');
+  }
+
+  // Best performing
+  const best = document.getElementById('adsBestPerforming');
+  if (best) {
+    const withSales = ads.filter(a=>a.sales>0).sort((a,b)=>(a.spend/a.sales)-(b.spend/b.sales));
+    if (withSales.length) {
+      const top = withSales[0];
+      best.innerHTML = `<div style="margin-bottom:12px;"><div style="font-size:11px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Lowest Cost Per Sale</div><div style="font-size:16px;font-weight:600;color:#fff">${top.name}</div><div style="font-family:'DM Mono',monospace;font-size:13px;color:var(--green)">$${(top.spend/top.sales).toFixed(2)}/sale</div><div style="font-size:11px;color:var(--text-muted);margin-top:4px;">${top.platform}</div></div>`;
+    } else {
+      best.innerHTML = `<div style="color:var(--text-muted);font-size:12px;">Log sales on your campaigns to see performance rankings.</div>`;
+    }
+  }
+}
+
+// ══════════════════════════════════════════
+// P&L
+// ══════════════════════════════════════════
+function initPnLFilters() {
+  const yEl = document.getElementById('pnlYear');
+  if (!yEl) return;
+  const years = [...new Set([
+    ...sales.map(s=>s.date?new Date(s.date).getFullYear():null),
+    new Date().getFullYear()
+  ].filter(Boolean))].sort((a,b)=>b-a);
+  const cur = yEl.value || new Date().getFullYear();
+  yEl.innerHTML = years.map(y=>`<option value="${y}" ${y==cur?'selected':''}>${y}</option>`).join('');
+}
+
+function renderPnL() {
+  initPnLFilters();
+  const year = parseInt(document.getElementById('pnlYear')?.value || new Date().getFullYear());
+  const qtr  = parseInt(document.getElementById('pnlQuarter')?.value || '0');
+  const qMonths = qtr ? [[0,1,2],[3,4,5],[6,7,8],[9,10,11]][qtr-1] : null;
+
+  const inPeriod = date => {
+    if (!date) return false;
+    const d = new Date(date);
+    if (d.getFullYear() !== year) return false;
+    if (qMonths && !qMonths.includes(d.getMonth())) return false;
+    return true;
+  };
+
+  const periodSales = sales.filter(s => inPeriod(s.date));
+  const revenue = periodSales.reduce((sum,s)=>sum+(parseFloat(s.price)||0),0);
+  const cogs    = periodSales.reduce((sum,s)=>sum+(parseFloat(s.cost)||0),0);
+  const gross   = revenue - cogs;
+
+  // Ad spend in period
+  const adSpend = ads.filter(a => {
+    if (!a.start) return false;
+    const d = new Date(a.start);
+    if (d.getFullYear() !== year) return false;
+    if (qMonths && !qMonths.includes(d.getMonth())) return false;
+    return true;
+  }).reduce((sum,a)=>sum+a.spend,0);
+
+  const net = gross - adSpend;
+  const margin = revenue ? ((gross/revenue)*100).toFixed(1) : 0;
+
+  // Update KPI cards
+  document.getElementById('pnl-revenue').textContent = fmt(revenue);
+  document.getElementById('pnl-cogs').textContent    = fmt(cogs);
+  document.getElementById('pnl-gross').textContent   = fmt(gross);
+  document.getElementById('pnl-adspend').textContent = fmt(adSpend);
+  const netEl = document.getElementById('pnl-net');
+  netEl.textContent = fmt(net);
+  netEl.style.color = net >= 0 ? 'var(--green)' : 'var(--red)';
+
+  // Statement title
+  const qLabel = qtr ? `Q${qtr} ` : '';
+  document.getElementById('pnlStatementTitle').textContent = `${qLabel}${year} P&L Statement`;
+
+  // Statement table
+  const body = document.getElementById('pnlBody');
+  if (body) {
+    body.innerHTML = `
+      <tr style="background:rgba(34,197,94,.05)"><td style="font-weight:600;color:var(--green)">Revenue</td><td>Trailer Sales (${periodSales.length} units)</td><td class="mono" style="text-align:right;color:var(--green)">${fmt(revenue)}</td></tr>
+      <tr><td style="font-weight:600;color:var(--red)">COGS</td><td>Inventory Cost</td><td class="mono" style="text-align:right;color:var(--red)">(${fmt(cogs)})</td></tr>
+      <tr style="border-top:2px solid var(--border2)"><td style="font-weight:700">Gross Profit</td><td style="color:var(--text-muted)">Gross Margin: ${margin}%</td><td class="mono" style="text-align:right;font-weight:700;color:${gross>=0?'var(--green)':'var(--red)'}">${fmt(gross)}</td></tr>
+      <tr><td style="font-weight:600;color:var(--yellow)">Expenses</td><td>Advertising &amp; Marketing</td><td class="mono" style="text-align:right;color:var(--yellow)">(${fmt(adSpend)})</td></tr>
+      <tr style="border-top:2px solid var(--border2);background:rgba(255,255,255,.03)"><td style="font-weight:700;font-size:14px">Net Profit</td><td style="color:var(--text-muted)">After known expenses</td><td class="mono" style="text-align:right;font-weight:700;font-size:14px;color:${net>=0?'var(--green)':'var(--red)'}">${fmt(net)}</td></tr>
+    `;
+  }
+
+  // Sales detail
+  const salesBody = document.getElementById('pnlSalesBody');
+  if (salesBody) {
+    if (!periodSales.length) {
+      salesBody.innerHTML = `<tr><td colspan="8" style="padding:24px;text-align:center;color:var(--text-muted)">No sales in this period.</td></tr>`;
+    } else {
+      salesBody.innerHTML = [...periodSales].sort((a,b)=>new Date(b.date)-new Date(a.date)).map(s=>{
+        const p = parseFloat(s.price)||0, c = parseFloat(s.cost)||0;
+        const profit = p - c;
+        const mg = p ? ((profit/p)*100).toFixed(1)+'%' : '—';
+        return `<tr>
+          <td class="mono" style="font-size:11px">${s.date||'—'}</td>
+          <td>${s.unit_desc||'—'}</td>
+          <td class="mono">${s.stock||'—'}</td>
+          <td class="mono">${fmt(p)}</td>
+          <td class="mono">${c?fmt(c):'—'}</td>
+          <td class="mono" style="color:${profit>=0?'var(--green)':'var(--red)'}">${c?fmt(profit):'—'}</td>
+          <td style="font-size:11px">${mg}</td>
+          <td><span class="pill ${s.finance==='Finance'?'p-blue':s.finance==='Cash'?'p-green':'p-gray'}">${s.finance||'—'}</span></td>
+        </tr>`;
+      }).join('');
+    }
+  }
+
+  // Quarter history
+  const histEl = document.getElementById('pnlHistory');
+  if (histEl) {
+    const allYears = [...new Set(sales.map(s=>s.date?new Date(s.date).getFullYear():null).filter(Boolean))].sort((a,b)=>b-a);
+    let histHTML = '';
+    allYears.forEach(y => {
+      [1,2,3,4].forEach(q => {
+        const qm = [[0,1,2],[3,4,5],[6,7,8],[9,10,11]][q-1];
+        const qs = sales.filter(s=>{
+          if(!s.date)return false;
+          const d=new Date(s.date);
+          return d.getFullYear()===y && qm.includes(d.getMonth());
+        });
+        if (!qs.length) return;
+        const qrev = qs.reduce((sum,s)=>sum+(parseFloat(s.price)||0),0);
+        const qcogs = qs.reduce((sum,s)=>sum+(parseFloat(s.cost)||0),0);
+        const qnet = qrev - qcogs;
+        const isSelected = y===year && q===qtr;
+        histHTML += `<div onclick="document.getElementById('pnlYear').value='${y}';document.getElementById('pnlQuarter').value='${q}';renderPnL();" style="padding:12px 16px;border-bottom:1px solid var(--border);cursor:pointer;background:${isSelected?'var(--surface2)':'transparent'};transition:background .15s;" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background='${isSelected?'var(--surface2)':'transparent'}'">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-muted)">Q${q} ${y}</span>
+            <span style="font-family:'DM Mono',monospace;font-size:12px;color:${qnet>=0?'var(--green)':'var(--red)'};font-weight:600">${fmt(qnet)}</span>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:2px">${qs.length} sales · ${fmt(qrev)} revenue</div>
+        </div>`;
+      });
+    });
+    histEl.innerHTML = histHTML || `<div style="padding:16px;color:var(--text-muted);font-size:12px">No history yet.</div>`;
+  }
+}
+
+function exportPnL() {
+  const year  = document.getElementById('pnlYear')?.value || new Date().getFullYear();
+  const qtr   = document.getElementById('pnlQuarter')?.value || '';
+  const label = qtr ? `Q${qtr}-${year}` : `FY${year}`;
+  const title = document.getElementById('pnlStatementTitle')?.textContent || 'P&L';
+
+  const rows = [
+    ['Spring Point Trailer Sales'],
+    [title],
+    ['Generated', new Date().toLocaleDateString()],
+    [],
+    ['Category','Item','Amount'],
+    ...[...document.querySelectorAll('#pnlBody tr')].map(r=>[...r.querySelectorAll('td')].map(td=>td.textContent.trim())),
+    [],
+    ['Sales Detail'],
+    ['Date','Unit','Stock','Sale Price','Cost','Profit','Margin','Finance'],
+    ...[...document.querySelectorAll('#pnlSalesBody tr')].map(r=>[...r.querySelectorAll('td')].map(td=>td.textContent.trim()))
+  ];
+
+  const csv = rows.map(r=>r.map(c=>`"${(c||'').replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `PnL-${label}.csv`; a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),5000);
+}
+</script>
 
 </body>
 </html>

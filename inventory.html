@@ -115,6 +115,13 @@ footer{background:#000;border-top:1px solid var(--border);padding:40px;}
       <button class="filter-btn" data-filter="Flatbed" onclick="filterUnits(this)">Flatbed</button>
       <button class="filter-btn" data-filter="Living Quarters" onclick="filterUnits(this)">Living Quarters</button>
     </div>
+    <div class="filter-bar" style="margin-top:8px;">
+      <span style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);font-family:'DM Mono',monospace;padding:7px 4px;">Condition:</span>
+      <button class="filter-btn active" data-condition="all" onclick="filterCondition(this)">All</button>
+      <button class="filter-btn" data-condition="New" onclick="filterCondition(this)">New</button>
+      <button class="filter-btn" data-condition="Pre-Owned" onclick="filterCondition(this)">Pre-Owned</button>
+      <button class="filter-btn" data-condition="Consignment" onclick="filterCondition(this)">Consignment</button>
+    </div>
   </div>
 </div>
 
@@ -144,6 +151,7 @@ const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 
 let allUnits = [];
 let currentFilter = 'all';
+let currentCondition = 'all';
 let searchQuery = '';
 
 async function loadInventory() {
@@ -174,6 +182,7 @@ function renderGrid() {
   const empty = document.getElementById('emptyState');
   let units = allUnits;
   if (currentFilter !== 'all') units = units.filter(u => u.type === currentFilter);
+  if (currentCondition !== 'all') units = units.filter(u => u.condition === currentCondition);
   if (searchQuery) {
     const q = searchQuery.toLowerCase();
     units = units.filter(u =>
@@ -222,6 +231,13 @@ function filterUnits(btn) {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   currentFilter = btn.dataset.filter;
+  renderGrid();
+}
+
+function filterCondition(btn) {
+  document.querySelectorAll('[data-condition]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentCondition = btn.dataset.condition;
   renderGrid();
 }
 
