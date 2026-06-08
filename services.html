@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Services — Spring Point Trailer Sales</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+:root{--bg:#080808;--surface:#101010;--surface2:#181818;--surface3:#222;--border:#272727;--border2:#353535;--text:#f0f0f0;--text-mid:#a0a0a0;--text-muted:#555;--green:#22c55e;--yellow:#eab308;--red:#ef4444;--blue:#3b82f6;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;overflow-x:hidden;}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:72px;background:rgba(8,8,8,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 40px;justify-content:space-between;}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:#fff;text-decoration:none;white-space:nowrap;}
+.nav-logo span{color:var(--text-muted);}
+.nav-links{display:flex;align-items:center;gap:32px;}
+.nav-links a{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);text-decoration:none;transition:color .15s;}
+.nav-links a:hover,.nav-links a.active{color:#fff;}
+.nav-burger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
+.nav-burger span{width:22px;height:2px;background:#fff;transition:all .2s;}
+.mobile-menu{display:none;position:fixed;inset:0;top:72px;background:rgba(8,8,8,.97);z-index:99;flex-direction:column;align-items:center;justify-content:center;gap:32px;}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:4px;color:var(--text-muted);text-decoration:none;transition:color .15s;}
+.mobile-menu a:hover{color:#fff;}
+.page-header{padding:120px 40px 60px;max-width:1200px;margin:0 auto;}
+.page-eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px;}
+.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,6vw,80px);letter-spacing:3px;color:#fff;line-height:1;margin-bottom:16px;}
+.page-sub{font-size:15px;color:var(--text-muted);max-width:520px;line-height:1.7;}
+.section-eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text-muted);margin-bottom:16px;}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(42px,5vw,72px);letter-spacing:3px;color:#fff;line-height:1;margin-bottom:20px;}
+.btn-primary{background:#fff;color:#000;padding:14px 32px;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .15s;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.btn-primary:hover{background:#e0e0e0;}
+.btn-ghost{background:transparent;color:var(--text-muted);border:1px solid var(--border2);padding:13px 28px;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .15s;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.btn-ghost:hover{color:#fff;border-color:#555;}
+footer{background:#000;border-top:1px solid var(--border);padding:60px 40px 40px;}
+.footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:60px;margin-bottom:48px;}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:4px;color:#fff;margin-bottom:12px;}
+.footer-tagline{font-size:12px;color:var(--text-muted);max-width:280px;line-height:1.6;}
+.footer-col-title{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:20px;}
+.footer-links{display:flex;flex-direction:column;gap:10px;}
+.footer-links a{font-size:13px;color:var(--text-mid);text-decoration:none;transition:color .15s;}
+.footer-links a:hover{color:#fff;}
+.footer-bottom{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid var(--border);}
+.footer-copy{font-size:11px;color:var(--text-muted);}
+.fade-up{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease;}
+.fade-up.visible{opacity:1;transform:translateY(0);}
+@media(max-width:900px){
+  nav{padding:0 24px;}
+  .nav-links{display:none;}
+  .nav-burger{display:flex;}
+  .page-header{padding:100px 24px 40px;}
+  .footer-inner{grid-template-columns:1fr;gap:32px;}
+  footer{padding:48px 24px 32px;}
+}
+
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);margin-top:60px;}
+.service-card{background:var(--surface);padding:36px 32px;border-bottom:3px solid transparent;transition:background .15s,border-color .15s;}
+.service-card:hover{background:var(--surface2);border-color:#fff;}
+.service-icon{font-size:28px;margin-bottom:20px;display:block;}
+.service-name{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:#fff;margin-bottom:10px;}
+.service-desc{font-size:13px;color:var(--text-muted);line-height:1.6;}
+.cta-band{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:80px 40px;text-align:center;margin-top:80px;}
+.cta-band h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,4vw,56px);letter-spacing:3px;color:#fff;margin-bottom:16px;}
+.cta-band p{font-size:15px;color:var(--text-muted);margin-bottom:32px;}
+.cta-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+@media(max-width:900px){.services-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">Spring Point<span> Trailer Sales</span></a>
+  <div class="nav-links">
+    <a href="inventory.html">Inventory</a>
+    <a href="services.html">Services</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <div class="nav-burger" onclick="toggleMobileMenu()" id="burger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="inventory.html" onclick="toggleMobileMenu()">Inventory</a>
+  <a href="services.html" onclick="toggleMobileMenu()">Services</a>
+  <a href="about.html" onclick="toggleMobileMenu()">About</a>
+  <a href="contact.html" onclick="toggleMobileMenu()">Contact</a>
+</div>
+<div class="page-header">
+  <div class="page-eyebrow fade-up">What We Offer</div>
+  <h1 class="page-title fade-up">Services</h1>
+  <p class="page-sub fade-up">We're not just a sales lot. Our shop handles repairs, maintenance, inspections, and PDI work — so you're covered after the sale too.</p>
+</div>
+<div style="max-width:1200px;margin:0 auto;padding:0 40px 80px;">
+  <div class="services-grid fade-up">
+    <div class="service-card">
+      <span class="service-icon">🛒</span>
+      <div class="service-name">New &amp; Used Sales</div>
+      <div class="service-desc">Cargo, utility, horse, livestock, equipment, flatbeds — we stock what you actually need. Financing available.</div>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🔧</span>
+      <div class="service-name">Trailer Repair</div>
+      <div class="service-desc">Axles, brakes, lights, floors, couplers, hitches — full service shop with experienced techs.</div>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🔍</span>
+      <div class="service-name">Inspections &amp; PDI</div>
+      <div class="service-desc">Pre-delivery inspections, pre-purchase checks, and DOT-ready brake and lighting inspections.</div>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🤝</span>
+      <div class="service-name">Consignment</div>
+      <div class="service-desc">Selling your trailer? We'll list it on our lot and handle the sale for a fair commission.</div>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🏷️</span>
+      <div class="service-name">Parts &amp; Accessories</div>
+      <div class="service-desc">Common trailer parts in stock — lights, straps, ball mounts, tie-downs, and more.</div>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">📋</span>
+      <div class="service-name">Paperwork &amp; Titles</div>
+      <div class="service-desc">We handle the bill of sale, title transfer, and all documentation so the transaction is clean.</div>
+    </div>
+  </div>
+</div>
+<div class="cta-band fade-up">
+  <h2>Need Service or Have a Question?</h2>
+  <p>Give us a call or stop in — Mon–Fri 8am–12pm, by appointment Mon–Sat anytime.</p>
+  <div class="cta-actions">
+    <a href="tel:6185060094" class="btn-primary">📞 Call 618-506-0094</a>
+    <a href="contact.html" class="btn-ghost">Send a Message →</a>
+  </div>
+</div>
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">Spring Point Trailer Sales</div>
+      <div class="footer-tagline">Quality trailers at honest prices. New, used, service, parts, and consignment.</div>
+    </div>
+    <div>
+      <div class="footer-col-title">Quick Links</div>
+      <div class="footer-links">
+        <a href="inventory.html">Inventory</a>
+        <a href="services.html">Services</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Trailer Types</div>
+      <div class="footer-links">
+        <a href="inventory.html">Cargo Trailers</a>
+        <a href="inventory.html">Utility Trailers</a>
+        <a href="inventory.html">Horse Trailers</a>
+        <a href="inventory.html">Equipment Trailers</a>
+        <a href="inventory.html">Flatbeds</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 Spring Point Trailer Sales. All rights reserved.</div>
+    <div style="font-size:11px;color:var(--text-muted);">Newton, IL · 618-506-0094</div>
+  </div>
+</footer>
+<script>
+function toggleMobileMenu(){document.getElementById('mobileMenu').classList.toggle('open');}
+const observer = new IntersectionObserver((entries)=>{entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*80);observer.unobserve(e.target);}});},{threshold:0.1});
+document.querySelectorAll('.fade-up').forEach(el=>observer.observe(el));
+window.addEventListener('scroll',()=>{const nav=document.getElementById('navbar');if(nav)nav.style.borderBottomColor=window.scrollY>60?'var(--border2)':'var(--border)';});
+</script>
+</body>
+</html>

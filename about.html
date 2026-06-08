@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Spring Point Trailer Sales</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+:root{--bg:#080808;--surface:#101010;--surface2:#181818;--surface3:#222;--border:#272727;--border2:#353535;--text:#f0f0f0;--text-mid:#a0a0a0;--text-muted:#555;--green:#22c55e;--yellow:#eab308;--red:#ef4444;--blue:#3b82f6;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;overflow-x:hidden;}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:72px;background:rgba(8,8,8,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 40px;justify-content:space-between;}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:#fff;text-decoration:none;white-space:nowrap;}
+.nav-logo span{color:var(--text-muted);}
+.nav-links{display:flex;align-items:center;gap:32px;}
+.nav-links a{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);text-decoration:none;transition:color .15s;}
+.nav-links a:hover,.nav-links a.active{color:#fff;}
+.nav-burger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
+.nav-burger span{width:22px;height:2px;background:#fff;transition:all .2s;}
+.mobile-menu{display:none;position:fixed;inset:0;top:72px;background:rgba(8,8,8,.97);z-index:99;flex-direction:column;align-items:center;justify-content:center;gap:32px;}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:4px;color:var(--text-muted);text-decoration:none;transition:color .15s;}
+.mobile-menu a:hover{color:#fff;}
+.page-header{padding:120px 40px 60px;max-width:1200px;margin:0 auto;}
+.page-eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px;}
+.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,6vw,80px);letter-spacing:3px;color:#fff;line-height:1;margin-bottom:16px;}
+.page-sub{font-size:15px;color:var(--text-muted);max-width:520px;line-height:1.7;}
+.section-eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text-muted);margin-bottom:16px;}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(42px,5vw,72px);letter-spacing:3px;color:#fff;line-height:1;margin-bottom:20px;}
+.btn-primary{background:#fff;color:#000;padding:14px 32px;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .15s;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.btn-primary:hover{background:#e0e0e0;}
+.btn-ghost{background:transparent;color:var(--text-muted);border:1px solid var(--border2);padding:13px 28px;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .15s;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.btn-ghost:hover{color:#fff;border-color:#555;}
+footer{background:#000;border-top:1px solid var(--border);padding:60px 40px 40px;}
+.footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:60px;margin-bottom:48px;}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:4px;color:#fff;margin-bottom:12px;}
+.footer-tagline{font-size:12px;color:var(--text-muted);max-width:280px;line-height:1.6;}
+.footer-col-title{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:20px;}
+.footer-links{display:flex;flex-direction:column;gap:10px;}
+.footer-links a{font-size:13px;color:var(--text-mid);text-decoration:none;transition:color .15s;}
+.footer-links a:hover{color:#fff;}
+.footer-bottom{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid var(--border);}
+.footer-copy{font-size:11px;color:var(--text-muted);}
+.fade-up{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease;}
+.fade-up.visible{opacity:1;transform:translateY(0);}
+@media(max-width:900px){
+  nav{padding:0 24px;}
+  .nav-links{display:none;}
+  .nav-burger{display:flex;}
+  .page-header{padding:100px 24px 40px;}
+  .footer-inner{grid-template-columns:1fr;gap:32px;}
+  footer{padding:48px 24px 32px;}
+}
+
+.about-grid{max-width:1200px;margin:0 auto;padding:0 40px 80px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;}
+.about-quote{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,4vw,56px);letter-spacing:2px;color:#fff;line-height:1.1;margin-bottom:24px;}
+.about-quote em{color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.3);font-style:normal;}
+.about-body{font-size:14px;color:var(--text-muted);line-height:1.8;margin-bottom:16px;}
+.stat-list{display:flex;flex-direction:column;gap:0;border:1px solid var(--border);}
+.stat-row{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-bottom:1px solid var(--border);}
+.stat-row:last-child{border-bottom:none;}
+.stat-label{font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;}
+.stat-val{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:#fff;}
+.why-band{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:80px 40px;margin-bottom:0;}
+.why-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);}
+.why-card{background:var(--surface2);padding:40px 32px;border-bottom:3px solid transparent;}
+.why-card:nth-child(1){border-color:#fff;}
+.why-card:nth-child(2){border-color:var(--green);}
+.why-card:nth-child(3){border-color:var(--blue);}
+.why-icon{font-size:36px;margin-bottom:16px;display:block;}
+.why-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;color:#fff;margin-bottom:10px;}
+.why-desc{font-size:13px;color:var(--text-muted);line-height:1.6;}
+@media(max-width:900px){.about-grid{grid-template-columns:1fr;gap:40px;padding:0 24px 60px;}.why-inner{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">Spring Point<span> Trailer Sales</span></a>
+  <div class="nav-links">
+    <a href="inventory.html">Inventory</a>
+    <a href="services.html">Services</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <div class="nav-burger" onclick="toggleMobileMenu()" id="burger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="inventory.html" onclick="toggleMobileMenu()">Inventory</a>
+  <a href="services.html" onclick="toggleMobileMenu()">Services</a>
+  <a href="about.html" onclick="toggleMobileMenu()">About</a>
+  <a href="contact.html" onclick="toggleMobileMenu()">Contact</a>
+</div>
+<div class="page-header">
+  <div class="page-eyebrow fade-up">Who We Are</div>
+  <h1 class="page-title fade-up">About Us</h1>
+</div>
+<div class="about-grid">
+  <div class="fade-up">
+    <h2 class="about-quote">We know<br><em>trailers.</em><br>That's it.</h2>
+    <p class="about-body">We're a dedicated trailer dealership — not a general equipment lot that happens to have a few trailers out back. Every unit we stock, every repair we make, and every customer we deal with is about trailers.</p>
+    <p class="about-body">That focus means you get better advice, better pricing, and better service than anywhere else. We're family owned, based in Newton, IL, and we've built our reputation on being straight with people.</p>
+    <p class="about-body">Whether you're buying your first trailer or your fifteenth, we'll treat you right.</p>
+    <div style="margin-top:32px;display:flex;gap:16px;flex-wrap:wrap;">
+      <a href="inventory.html" class="btn-primary">Browse Inventory →</a>
+      <a href="contact.html" class="btn-ghost">Get in Touch</a>
+    </div>
+  </div>
+  <div class="stat-list fade-up">
+    <div class="stat-row"><span class="stat-label">Ownership</span><span class="stat-val">Family Owned</span></div>
+    <div class="stat-row"><span class="stat-label">Location</span><span class="stat-val">Newton, IL</span></div>
+    <div class="stat-row"><span class="stat-label">Trailer Types</span><span class="stat-val">7+</span></div>
+    <div class="stat-row"><span class="stat-label">Service</span><span class="stat-val">Same Day</span></div>
+    <div class="stat-row"><span class="stat-label">Financing</span><span class="stat-val">Available</span></div>
+    <div class="stat-row"><span class="stat-label">Trade-Ins</span><span class="stat-val">Welcome</span></div>
+    <div class="stat-row"><span class="stat-label">Consignment</span><span class="stat-val">Accepted</span></div>
+    <div class="stat-row"><span class="stat-label">Hours</span><span class="stat-val" style="font-size:16px;text-align:right;">Mon–Fri 8–12<br><span style="color:var(--text-muted);font-size:13px;">By appt Mon–Sat</span></span></div>
+  </div>
+</div>
+<div class="why-band">
+  <div class="why-inner fade-up">
+    <div class="why-card">
+      <span class="why-icon">🤝</span>
+      <div class="why-title">Family Owned</div>
+      <div class="why-desc">When you buy from us you're dealing directly with the owner — someone who stands behind every sale.</div>
+    </div>
+    <div class="why-card">
+      <span class="why-icon">🔄</span>
+      <div class="why-title">We Take Trades</div>
+      <div class="why-desc">Got a trailer to move? Bring it in and we'll give you a fair offer on the spot — no runaround.</div>
+    </div>
+    <div class="why-card">
+      <span class="why-icon">💳</span>
+      <div class="why-title">Financing Available</div>
+      <div class="why-desc">We offer financing options to help you get the trailer you need today. Ask us about rates and terms.</div>
+    </div>
+  </div>
+</div>
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">Spring Point Trailer Sales</div>
+      <div class="footer-tagline">Quality trailers at honest prices. New, used, service, parts, and consignment.</div>
+    </div>
+    <div>
+      <div class="footer-col-title">Quick Links</div>
+      <div class="footer-links">
+        <a href="inventory.html">Inventory</a>
+        <a href="services.html">Services</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Trailer Types</div>
+      <div class="footer-links">
+        <a href="inventory.html">Cargo Trailers</a>
+        <a href="inventory.html">Utility Trailers</a>
+        <a href="inventory.html">Horse Trailers</a>
+        <a href="inventory.html">Equipment Trailers</a>
+        <a href="inventory.html">Flatbeds</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 Spring Point Trailer Sales. All rights reserved.</div>
+    <div style="font-size:11px;color:var(--text-muted);">Newton, IL · 618-506-0094</div>
+  </div>
+</footer>
+<script>
+function toggleMobileMenu(){document.getElementById('mobileMenu').classList.toggle('open');}
+const observer = new IntersectionObserver((entries)=>{entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*80);observer.unobserve(e.target);}});},{threshold:0.1});
+document.querySelectorAll('.fade-up').forEach(el=>observer.observe(el));
+window.addEventListener('scroll',()=>{const nav=document.getElementById('navbar');if(nav)nav.style.borderBottomColor=window.scrollY>60?'var(--border2)':'var(--border)';});
+</script>
+</body>
+</html>
