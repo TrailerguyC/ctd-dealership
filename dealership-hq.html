@@ -1969,6 +1969,26 @@ function buildSummaryText(){
 
   const notes=(document.getElementById('summaryNotes')?.value||'').trim();
 
+  // Floor plan accrual detail
+  const fpUnits = avail.filter(u => u.floorplan && u.fp_rate);
+  const fpDailyTotal = fpUnits.reduce((sum, u) => {
+    return sum + (parseFloat(u.floorplan) * (parseFloat(u.fp_rate)/100) / 365);
+  }, 0);
+  const fpDetail = fpUnits.length ? fpUnits.map(u => {
+    const bal = parseFloat(u.floorplan);
+    const rate = parseFloat(u.fp_rate);
+    const daily = bal * (rate/100) / 365;
+    const days = dol(u) || 0;
+    const accrued = daily * days;
+    const ask = parseFloat(u.ask) || 0;
+    const cost = parseFloat(u.cost) || 0;
+    const grossProfit = ask - cost;
+    const netAfterFP = grossProfit - accrued;
+    return `  - ${u.year||''} ${u.make||''} ${u.model||''} (Stock: ${u.stock||'?'})
+    Balance: ${fmt(bal)} @ ${rate}% | Daily Interest: $${daily.toFixed(2)} | Days on Lot: ${days}
+    Accrued Interest: ${fmt(accrued)} | Ask: ${fmt(ask)} | Gross Profit: ${fmt(grossProfit)} | Net After FP: ${fmt(netAfterFP)}`;
+  }).join('\n') : '  No units currently on floor plan with rate data';
+
   const lines=[
 `================================================================
 DEALERSHIP DAILY SUMMARY
@@ -2023,6 +2043,15 @@ ${upcomingWeek.length?upcomingWeek.map(e=>`  - ${e.date} | [${e.type.toUpperCase
 INTELLIGENCE FLAGS
 ------------------
 ${buildFlagsText()}
+
+FLOOR PLAN ACCRUAL DETAIL
+--------------------------
+Total FP Balance:    ${fmt(fp)}
+Daily Interest Cost: $${fpDailyTotal.toFixed(2)}/day
+Monthly Est. Cost:   ${fmt(fpDailyTotal * 30)}
+
+Per-Unit Breakdown:
+${fpDetail}
 `,
 notes?`OWNER NOTES / CONTEXT FOR TODAY
 --------------------------------
