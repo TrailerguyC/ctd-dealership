@@ -864,23 +864,19 @@ function renderFiltered() {
   units = units.slice(0, 6);
 
   grid.innerHTML = units.map(u => {
+    const isSold = u.status === 'sold';
     const name  = [u.year, u.make, u.model].filter(Boolean).join(' ') || 'Trailer Unit';
     const price = u.ask_price ? parseFloat(u.ask_price).toLocaleString('en-US', {minimumFractionDigits:0}) : 'Call for Price';
-    const statusClass = u.status === 'pending' ? 'pending' : (u.status === 'sold' ? 'sold' : '');
-    const statusLabel = u.status === 'consignment' ? 'Consignment' : (u.status === 'pending' ? 'Pending' : 'Available');
-    // Parse photos — stored as JSON string from Supabase
+    const statusClass = isSold ? 'sold' : (u.status === 'pending' ? 'pending' : '');
+    const statusLabel = isSold ? 'Just Sold' : (u.status === 'consignment' ? 'Consignment' : (u.status === 'pending' ? 'Pending' : 'Available'));
     let photos = [];
     try { photos = u.photos ? (typeof u.photos === 'string' ? JSON.parse(u.photos) : u.photos) : []; } catch(e){}
+    const soldOverlay = isSold ? '<div style="position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;"><span style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;letter-spacing:4px;color:#fff;border:2px solid #fff;padding:6px 18px;">SOLD</span></div>' : '';
     const photoHTML = photos.length
-      ? `<div style="aspect-ratio:16/9;overflow:hidden;margin:-28px -28px 20px;background:var(--surface3);position:relative;">
-           <img src="${photos[0]}" style="width:100%;height:100%;object-fit:cover;display:block;">
-           ${isSold ? '<div style="position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;"><span style="font-family:Bebas Neue,sans-serif;font-size:28px;letter-spacing:4px;color:#fff;border:2px solid #fff;padding:6px 18px;">SOLD</span></div>' : ''}
-         </div>`
-      : '';
-    const isSold = u.status === 'sold';
-    const soldBanner = isSold ? '<div style="position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;"><span style=\'font-family:\'Bebas Neue\',sans-serif;font-size:28px;letter-spacing:4px;color:#fff;border:2px solid #fff;padding:6px 18px;\'>SOLD</span></div>' : '';
+      ? `<div style="aspect-ratio:16/9;overflow:hidden;margin:-28px -28px 20px;background:var(--surface3);position:relative;"><img src="${photos[0]}" style="width:100%;height:100%;object-fit:cover;display:block;">${soldOverlay}</div>`
+      : (isSold ? `<div style="aspect-ratio:16/9;margin:-28px -28px 20px;background:var(--surface3);position:relative;display:flex;align-items:center;justify-content:center;"><span style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:4px;color:var(--text-muted);border:2px solid var(--border2);padding:6px 18px;">SOLD</span></div>` : '');
     return `
-      <div class="unit-card" style="${isSold ? 'cursor:default;' : ''}" onclick="${isSold ? '' : "window.location='trailer.html?id=${u.id}'"}" >
+      <div class="unit-card" style="${isSold ? 'cursor:default;' : ''}" ${isSold ? '' : `onclick="window.location='trailer.html?id=${u.id}'"`}>
         ${photoHTML}
         <div class="unit-tag">
           <span class="tag-pill ${statusClass}">${statusLabel}</span>
@@ -893,7 +889,7 @@ function renderFiltered() {
         </div>
         <div class="unit-footer">
           <span class="unit-stock">${u.stock ? 'Stock: ' + u.stock : ''}</span>
-          <span class="unit-arrow">→</span>
+          <span class="unit-arrow">${isSold ? '' : '→'}</span>
         </div>
       </div>`;
   }).join('');
