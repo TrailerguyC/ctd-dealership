@@ -25,7 +25,7 @@
 }
 
 *{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
+html{scroll-behavior:smooth;scroll-padding-top:72px;}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;overflow-x:hidden;}
 
 /* ── SCROLLBAR ── */
@@ -55,21 +55,12 @@ nav {
   text-decoration:none;transition:color .15s;
 }
 .nav-links a:hover{color:#fff;}
-.nav-hq {
-  display:flex;align-items:center;gap:8px;
-  background:var(--surface2);border:1px solid var(--border2);
-  padding:7px 16px;font-size:11px;font-weight:700;
-  letter-spacing:1px;text-transform:uppercase;color:#fff;
-  text-decoration:none;transition:all .15s;cursor:pointer;
-}
-.nav-hq:hover{background:var(--surface3);border-color:#555;}
-.nav-hq .dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 
 /* ── HERO ── */
 .hero {
   min-height:100vh;display:flex;align-items:flex-end;
-  padding:0 0 80px 0;position:relative;overflow:hidden;
+  padding:72px 0 80px 0;position:relative;overflow:hidden;
 }
 .hero-bg {
   position:absolute;inset:0;
@@ -601,7 +592,6 @@ footer{
     </div>
   </div>
   <div class="inv-grid fade-up" id="inventoryGrid"></div>
-  <div id="debugMsg" style="max-width:1200px;margin:12px auto;padding:10px 16px;font-family:'DM Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:1px;"></div>
   <div class="inv-cta" style="margin-top:32px;display:flex;gap:16px;justify-content:center;">
     <a href="inventory.html" class="btn-primary">View All Inventory →</a>
     <a href="#contact" class="btn-ghost">Don't see what you need? Ask us</a>
