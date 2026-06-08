@@ -1116,6 +1116,18 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 
 </div><!-- /app-body -->
 
+<!-- BACKUP REMINDER BANNER -->
+<div id="backupBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:rgba(234,179,8,.12);border-top:1px solid rgba(234,179,8,.3);padding:12px 24px;display:none;align-items:center;gap:16px;justify-content:space-between;">
+  <div style="display:flex;align-items:center;gap:12px;">
+    <span style="font-size:18px;">⚠️</span>
+    <span id="backupMsg" style="font-size:13px;color:#fff;"></span>
+  </div>
+  <div style="display:flex;gap:8px;flex-shrink:0;">
+    <button class="btn btn-primary btn-sm" onclick="exportAllData()" style="font-size:11px;padding:6px 16px;">↓ Export Now</button>
+    <button class="btn btn-ghost btn-sm" onclick="dismissBackupBanner()" style="font-size:11px;padding:6px 12px;">Dismiss</button>
+  </div>
+</div>
+
 <!-- ══ WORK ORDER MODAL ══ -->
 <div class="overlay" id="woOverlay">
   <div class="modal" style="max-width:780px">
@@ -1364,6 +1376,23 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
           <input type="file" id="u_photo_upload" accept="image/*" multiple onchange="uploadUnitPhotos(this)" style="display:none">
         </label>
         <div id="u_photo_status" style="font-size:11px;color:var(--text-muted);"></div>
+      </div>
+      <div class="msec">Documents (Google Drive Links)</div>
+      <div class="fg">
+        <div class="fi full" style="position:relative;">
+          <label class="fl">Invoice</label>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input id="u_invoice_link" type="url" placeholder="Paste Google Drive link to invoice PDF…" style="flex:1;" oninput="document.getElementById('u_invoice_open').style.display=this.value?'inline-flex':'none'">
+            <button type="button" class="btn btn-ghost btn-sm" id="u_invoice_open" onclick="openDocLink('u_invoice_link')" style="display:none;white-space:nowrap;">📄 Open</button>
+          </div>
+        </div>
+        <div class="fi full" style="position:relative;">
+          <label class="fl">Title</label>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input id="u_title_link" type="url" placeholder="Paste Google Drive link to title PDF…" style="flex:1;" oninput="document.getElementById('u_title_open').style.display=this.value?'inline-flex':'none'">
+            <button type="button" class="btn btn-ghost btn-sm" id="u_title_open" onclick="openDocLink('u_title_link')" style="display:none;white-space:nowrap;">📄 Open</button>
+          </div>
+        </div>
       </div>
       <div class="msec">Public Description</div>
       <div class="fg"><div class="fi full"><textarea id="u_description" rows="3" placeholder="Describe this trailer for the website — features, condition, accessories, etc."></textarea></div></div>
@@ -2534,7 +2563,7 @@ function openUnitModal(id){
   if(id){
     const u=inventory.find(u=>u.id===id);
     if(u){
-      ['stock','year','make','model','type','condition','vin','color','length','gvwr','msrp','ask','cost','floorplan','fp_rate','fp_start','date_in','status','notes','description',
+      ['stock','year','make','model','type','condition','vin','color','length','gvwr','msrp','ask','cost','floorplan','fp_rate','fp_start','date_in','status','notes','description','invoice_link','title_link',
        'sale_price','sale_date','buyer','buyer_phone','buyer_addr','sale_finance','lender','down_payment',
        'tax_pct','tax_amt','title_fee','license_fee','doc_fee','prep_fee',
        'owner','owner_phone','owner_ask','consign_pct','consign_fee','consign_start'].forEach(f=>{const el=document.getElementById('u_'+f);if(el)el.value=u[f]||'';});
@@ -2548,9 +2577,18 @@ function openUnitModal(id){
       calcDealTotal();
       // Load photos
       renderUnitPhotos(u.photos || []);
+      // Show open buttons if links exist
+      const invBtn = document.getElementById('u_invoice_open');
+      const titleBtn = document.getElementById('u_title_open');
+      if (invBtn) invBtn.style.display = u.invoice_link ? 'inline-flex' : 'none';
+      if (titleBtn) titleBtn.style.display = u.title_link ? 'inline-flex' : 'none';
     }
   } else {
     renderUnitPhotos([]);
+    const invBtn = document.getElementById('u_invoice_open');
+    const titleBtn = document.getElementById('u_title_open');
+    if (invBtn) invBtn.style.display = 'none';
+    if (titleBtn) titleBtn.style.display = 'none';
   }
   openOverlay('unitOverlay');
 }
@@ -2566,6 +2604,7 @@ function saveUnit(){
     cost:g('u_cost'),floorplan:g('u_floorplan'),fp_rate:g('u_fp_rate'),fp_start:g('u_fp_start'),
     date_in:g('u_date_in'),status:g('u_status'),notes:g('u_notes'),
     gvwr:g('u_gvwr'),description:g('u_description'),
+    invoice_link:g('u_invoice_link'),title_link:g('u_title_link'),
     sale_price:g('u_sale_price'),sale_date:g('u_sale_date'),buyer:g('u_buyer'),
     buyer_phone:g('u_buyer_phone'),buyer_addr:g('u_buyer_addr'),sale_finance:g('u_sale_finance'),
     lender:g('u_lender'),down_payment:g('u_down_payment'),
@@ -2591,7 +2630,51 @@ function saveUnit(){
   saveData();closeOverlay('unitOverlay');refreshAll();
 }
 
-// ── PHOTO UPLOAD ──
+// ── DOCUMENT LINKS ──
+function openDocLink(inputId) {
+  const url = document.getElementById(inputId)?.value?.trim();
+  if (url) window.open(url, '_blank');
+}
+
+// ── BACKUP REMINDER ──
+function checkBackupReminder() {
+  const last = localStorage.getItem('hq_last_export');
+  const banner = document.getElementById('backupBanner');
+  if (!banner) return;
+  if (!last) {
+    // Never exported — show after they have some data
+    if (inventory.length > 0) {
+      banner.style.display = 'flex';
+      banner.querySelector('#backupMsg').textContent = 'You haven\'t exported a backup yet. Export your data now to protect it.';
+    }
+    return;
+  }
+  const daysSince = (Date.now() - parseInt(last)) / (1000 * 60 * 60 * 24);
+  if (daysSince >= 7) {
+    banner.style.display = 'flex';
+    banner.querySelector('#backupMsg').textContent = `It's been ${Math.floor(daysSince)} days since your last backup. Export now to stay protected.`;
+  }
+}
+
+function dismissBackupBanner() {
+  document.getElementById('backupBanner').style.display = 'none';
+}
+
+// Stamp export time when exporting
+const _origExport = exportAllData;
+// Wrap exportAllData to stamp timestamp
+(function(){
+  const orig = window.exportAllData;
+  if (!orig) return;
+  window.exportAllData = function() {
+    orig();
+    localStorage.setItem('hq_last_export', Date.now().toString());
+    document.getElementById('backupBanner').style.display = 'none';
+  };
+})();
+
+// Check on load
+setTimeout(checkBackupReminder, 1500);
 async function uploadUnitPhotos(input) {
   const files = Array.from(input.files);
   if (!files.length) return;
@@ -3806,6 +3889,7 @@ function refreshCRM(){
 // EXPORT / IMPORT ALL DATA
 // ══════════════════════════════════════════
 function exportAllData(){
+  localStorage.setItem('hq_last_export', Date.now().toString());
   const payload = {
     version: 1,
     exported: new Date().toISOString(),
